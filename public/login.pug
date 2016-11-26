@@ -1,0 +1,47 @@
+doctype html
+html(lang='en')
+  head
+    title
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(href='static/css/login-styles.css', rel='stylesheet')
+    link(href='static/css/bootstrap.min.css', rel='stylesheet')
+  body
+    .container
+      .row
+        .col-md-6.col-md-offset-3
+          .panel.panel-login
+            .panel-heading
+              .row
+                .col-xs-6
+                  a#login-form-link.active(href='#') Login
+                .col-xs-6
+                  a#register-form-link(href='#') Register
+              hr
+            .panel-body
+              .row
+                .col-lg-12
+                  form#login-form(action='/login', method='post', role='form', style='display: block;')
+                    .form-group
+                      input#username.form-control(type='text', name='username', tabindex='1', placeholder='Username', value='')
+                    .form-group
+                      input#password.form-control(type='password', name='password', tabindex='2', placeholder='Password')
+                    .form-group
+                      .row
+                        .col-sm-6.col-sm-offset-3
+                          input#login-submit.btn-success.form-control.btn.btn-login(type='submit', name='login-submit', tabindex='4', value='Log In')
+                  form#register-form(action='/register', method='POST', role='form', style='display: none;')
+                    .form-group
+                      input#username.form-control(type='text', name='username', tabindex='1', placeholder='Username', value='')
+                    .form-group
+                      input#password.form-control(type='password', name='password', tabindex='2', placeholder='Password')
+                    .form-group
+                      input#image.form-control(type='text', name='image', tabindex='3', placeholder='Url of avatar image')
+                    .form-group
+                      .row
+                        .col-sm-6.col-sm-offset-3
+                          input#register-submit.btn-success.form-control.btn.btn-register(type='submit', name='register-submit', tabindex='4', value='Register Now')
+    // Loaded scripts
+    script(src='static/js/jquery.js')
+    script(src='static/js/bootstrap.min.js')
+    script(src='static/js/login-register.js')

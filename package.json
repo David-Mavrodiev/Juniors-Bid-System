@@ -1,0 +1,29 @@
+{
+  "name": "juniors-bid-system",
+  "version": "1.0.0",
+  "description": "Bid system.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/David-Mavrodiev/Juniors-Bid-System.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/David-Mavrodiev/Juniors-Bid-System/issues"
+  },
+  "homepage": "https://github.com/David-Mavrodiev/Juniors-Bid-System#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
+    "express-session": "^1.14.2",
+    "mongoose": "^4.7.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "pug": "^2.0.0-beta6"
+  }
+}
