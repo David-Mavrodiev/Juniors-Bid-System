@@ -3,7 +3,7 @@
 module.exports = function(data) {
     return {
         getHome(req, res) {
-            res.render("../public/index.pug")
+            res.render("../public/home.pug")
                 //res.redirect("/static/index.html");
         },
         getLogin(req, res) {

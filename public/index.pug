@@ -11,6 +11,9 @@ html(lang='en')
     link(href='static/css/bootstrap.min.css', rel='stylesheet')
     // Custom CSS
     link(href='static/css/heroic-features.css', rel='stylesheet')
+    link(href='static/css/login-styles.css', rel='stylesheet')
+    link(href='static/css/profile-styles.css', rel='stylesheet')
+    link(href='http://fonts.googleapis.com/css?family=Open+Sans', rel='stylesheet', type='text/css')
     // HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
     // WARNING: Respond.js doesn't work if you view the page via file://
     //if lt IE 9
@@ -44,50 +47,7 @@ html(lang='en')
         h1 BID SYSTEM
         p In our system you can take part in many different auctions and you may won it.
       hr
-      // Title
-      .row
-        .col-lg-12
-          h3 Latest auctions
-      // /.row
-      // Page Features
-      .row.text-center
-        .col-md-3.col-sm-6.hero-feature
-          .thumbnail
-            img(src='http://placehold.it/800x500', alt='')
-            .caption
-              h3 Feature Label
-              p Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              p
-                a.btn.btn-primary(href='#') Buy Now!
-                a.btn.btn-default(href='#') More Info
-        .col-md-3.col-sm-6.hero-feature
-          .thumbnail
-            img(src='http://placehold.it/800x500', alt='')
-            .caption
-              h3 Feature Label
-              p Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              p
-                a.btn.btn-primary(href='#') Buy Now!
-                a.btn.btn-default(href='#') More Info
-        .col-md-3.col-sm-6.hero-feature
-          .thumbnail
-            img(src='http://placehold.it/800x500', alt='')
-            .caption
-              h3 Feature Label
-              p Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              p
-                a.btn.btn-primary(href='#') Buy Now!
-                a.btn.btn-default(href='#') More Info
-        .col-md-3.col-sm-6.hero-feature
-          .thumbnail
-            img(src='http://placehold.it/800x500', alt='')
-            .caption
-              h3 Feature Label
-              p Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              p
-                a.btn.btn-primary(href='#') Buy Now!
-                a.btn.btn-default(href='#') More Info
-      // /.row
+      block content
       hr
       // Footer
       footer
