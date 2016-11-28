@@ -1,17 +1,23 @@
 /*globals module require*/
 'use strict';
+const constants = require('../utils/constants');
 
 module.exports = function (data) {
     return {
-        getAll(req, res){
+        getAll(req, res) {
+            let isLoggedIn = req.isAuthenticated();
+
             data.getAllAuctions()
                 .then(auctions => {
                     res.render('auctions-list', {
-                        result: auctions
+                        result: {
+                            auctions: auctions,
+                            isAuthenticated: isLoggedIn
+                        }
                     })
                 })
         },
-        getById(req, res){
+        getById(req, res) {
             data.getAuctionById(req.params.id)
                 .then(auction => {
                     if (auction === null) {
@@ -19,7 +25,7 @@ module.exports = function (data) {
                             .redirect('/error');
                     }
                     res.render('auction-details', {
-                        result: auction
+                        result: auction,
                     });
                 })
         },

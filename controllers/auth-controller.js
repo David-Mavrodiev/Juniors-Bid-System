@@ -74,7 +74,8 @@ module.exports = function (data) {
 
                         data.createUser(user)
                             .then(dbUser => {
-                                // wtf SEE
+                                // log in user after registering it
+                                // how to call this function? this seems weird
                                 require('./auth-controller')(data).loginLocal(req, res, next);
                             })
                             .catch(error => res.status(500).json(error));
