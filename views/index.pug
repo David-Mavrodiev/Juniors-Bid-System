@@ -39,7 +39,10 @@ html(lang='en')
             .pull-right
               ul.nav.navbar-nav
                 li
-                  a(href='/login') Log in / Sign up
+                  if result.isAuthenticated
+                    a(href='/profile') Profile
+                  else
+                    a(href='/login') Log in / Sign up
         // /.navbar-collapse
       // /.container
     // Page Content
@@ -49,6 +52,7 @@ html(lang='en')
         h1 BID SYSTEM
         p In our system you can take part in many different auctions and you may won it.
       hr
+      // Main content
       block content
       hr
       // Footer

@@ -60,7 +60,7 @@ module.exports = function (data) {
             req.logout();
             res.redirect('/home');
         },
-        register(req, res) {
+        register(req, res, next) {
             data.findUserByUsername(req.body.username)
                 .then((user) => {
                     if (user) {
@@ -74,7 +74,8 @@ module.exports = function (data) {
 
                         data.createUser(user)
                             .then(dbUser => {
-                                res.redirect("/home");
+                                // wtf SEE
+                                require('./auth-controller')(data).loginLocal(req, res, next);
                             })
                             .catch(error => res.status(500).json(error));
                     }
