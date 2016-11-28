@@ -1,0 +1,7 @@
+.jumbotron {
+    margin-top: 0;
+    height: 640px;
+    background-image: url('../img/JuniorsLogo.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
