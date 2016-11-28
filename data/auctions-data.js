@@ -5,7 +5,7 @@ module.exports = function (models) {
     let Auction = models.Auction;
 
     return {
-        getAllAuctions(){
+        getAllAuctions : function(){
             return new Promise((resolve, reject) => {
                 Auction.find((err, auctions) => {
                     if (err) {
@@ -16,18 +16,18 @@ module.exports = function (models) {
                 })
             });
         },
-        getAuctionById(id){
+        getAuctionById : function(id){
             return new Promise((resolve, reject) => {
                 Auction.findOne({_id: id}, (err, auction) => {
                     if (err) {
                         reject(err);
                     }
 
-                    resolve(auction);
+                    return resolve(auction);
                 })
             });
         },
-        createAuction(name, item, bidders){
+        createAuction: function(name, item, bidders){
             let auction = new Auction({name, item, bidders});
             return new Promise((resolve, reject) => {
                 auction.save(err => {

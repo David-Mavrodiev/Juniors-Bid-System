@@ -7,10 +7,12 @@ const path = require('path');
 
 module.exports = function (config) {
     mongoose.Promise = global.Promise;
-    mongoose.connect(config.connectionString);
+    mongoose.connect(config.auctionsConnectionString);
 
     let Auction = require('../models/auction-model');
-    let models = {Auction};
+    let User = require('../models/user-model');
+    let models = {Auction,User};
+
     let data = {};
     //Magic happens here, please don't be offensive
     fs.readdirSync('./data')

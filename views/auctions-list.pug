@@ -1,6 +1,15 @@
-extends  _layout
+extends index
 
 block content
-    each auction in result
-        h1= auction.name
-
+    .container
+        .row
+            each auction in result
+                div.auction
+                    h1= 'Title:' + auction.name
+                    h2= 'Item For sale:' + auction.item
+                    h3='Bidders:'
+                    each bidder in auction.bidders
+                        span= bidder + ', '
+    // Loaded scripts
+    script(src='static/js/jquery.js')
+    script(src='static/js/bootstrap.min.js')
