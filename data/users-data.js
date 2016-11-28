@@ -27,11 +27,12 @@ module.exports = (User) => {
         },
         createUser: function (obj) {
             //console.log(`Username: ${username}, Password: ${password}`);
-            let user = new User({
+            const user = new User({
                 username: obj.username,
                 password: obj.password,
                 image: obj.image
             });
+
             return Promise.resolve(user.save());
         }
     };

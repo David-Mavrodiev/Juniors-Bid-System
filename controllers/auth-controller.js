@@ -63,26 +63,27 @@ module.exports = function (data) {
         register(req, res) {
             data.findUserByUsername(req.body.username)
                 .then((user) => {
-                    if (!user) {
-                        return res.redirect('/register');
+                    if (user) {
+                        res.redirect('/register');
+                    } else {
+                        const user = {
+                            username: req.body.username,
+                            password: req.body.password,
+                            image: req.body.image
+                        };
+
+                        data.createUser(user)
+                            .then(dbUser => {
+                                res.redirect("/home");
+                            })
+                            .catch(error => res.status(500).json(error));
                     }
                 })
                 .catch((err) => {
-                    console.log(err);
+                    if (err) {
+                        console.log(err);
+                    }
                 });
-
-            const user = {
-                username: req.body.username,
-                password: req.body.password,
-                image: req.body.image
-            };
-
-            //console.log(data);
-            data.createUser(user)
-                .then(dbUser => {
-                    res.redirect("/home");
-                })
-                .catch(error => res.status(500).json(error));
         }
     }
 };
