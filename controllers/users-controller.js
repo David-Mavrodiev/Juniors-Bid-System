@@ -3,11 +3,11 @@
 module.exports = function(data) {
     return {
         getHome(req, res) {
-            res.render("../public/home.pug")
+            res.render("home");
                 //res.redirect("/static/index.html");
         },
         getLogin(req, res) {
-            res.render("../public/login.pug");
+            res.render("login");
         },
         getProfile(req, res) {
             if (!req.isAuthenticated()) {
@@ -15,7 +15,7 @@ module.exports = function(data) {
             } else {
                 const user = req.user;
                 console.log(user.image);
-                res.render("../public/profile.pug", {
+                res.render("profile", {
                     result: {
                         username: user.username,
                         image: user.image
@@ -27,7 +27,7 @@ module.exports = function(data) {
             res.send('<h1>Wa wa!</h1>');
         },
         getRegister(req, res) {
-            res.render("../public/register.pug");
+            res.render("register");
         }
     };
 };
