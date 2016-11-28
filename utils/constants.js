@@ -1,8 +1,8 @@
 /* globals module require*/
 
 const secretWord = "secret";
-const usersConnectionString = "mongodb://localhost/27017/Users";
 const port = 3001;
+const usersConnectionString = "mongodb://localhost:27017/Users";
 
 module.exports = {
     secretWord,

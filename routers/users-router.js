@@ -4,10 +4,11 @@ const router = require("express").Router(),
     createAuthController = require("../controllers/auth-controller"),
     createUsersController = require("../controllers/users-controller"),
     data = require("../data"),
-    passport = require("passport");
+    passport = require("passport"),
+    User = require("../models/user-model");
 
-const authController = createAuthController(require("../data/users-data")),
-    usersController = createUsersController(require("../data/users-data"));
+const authController = createAuthController(require("../data/users-data")(User)),
+    usersController = createUsersController(require("../data/users-data")(User));
 
 module.exports = app => {
     router

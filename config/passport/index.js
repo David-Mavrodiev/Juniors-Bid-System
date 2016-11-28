@@ -1,7 +1,8 @@
 "use strict"
 
 const passport = require("passport"),
-    data = require("../../data/users-data");
+    User = require("../../models/user-model"),
+    data = require("../../data/users-data")(User);
 
 passport.serializeUser((user, done) => {
     if (user) {

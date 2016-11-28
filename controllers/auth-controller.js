@@ -2,10 +2,10 @@
 
 const passport = require('passport');
 
-module.exports = function(data) {
+module.exports = function (data) {
     return {
         loginLocal(req, res, next) {
-            const auth = passport.authenticate('local', function(error, user) {
+            const auth = passport.authenticate('local', function (error, user) {
                 if (error) {
                     next(error);
                     return;
@@ -31,7 +31,7 @@ module.exports = function(data) {
             auth(req, res, next);
         },
         loginGithub(req, res, next) {
-            const auth = passport.authenticate('github', function(error, user) {
+            const auth = passport.authenticate('github', function (error, user) {
                 if (error) {
                     next(error);
                     return;
@@ -61,11 +61,22 @@ module.exports = function(data) {
             res.redirect('/home');
         },
         register(req, res) {
+            data.findUserByUsername(req.body.username)
+                .then((user) => {
+                    if (!user) {
+                        return res.redirect('/register');
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
             const user = {
                 username: req.body.username,
                 password: req.body.password,
                 image: req.body.image
             };
+
             //console.log(data);
             data.createUser(user)
                 .then(dbUser => {

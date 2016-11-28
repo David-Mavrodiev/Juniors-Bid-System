@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 module.exports = function(data) {
     return {
@@ -27,13 +27,7 @@ module.exports = function(data) {
             res.send('<h1>Wa wa!</h1>');
         },
         getRegister(req, res) {
-            res.status(200).send(`
-                <form action="/register" method="POST">
-                    <input type="text" name="username" placeholder="Username" />
-                    <input type="text" name="password" placeholder="Password" />
-                    <input type="submit" value="Submit">
-                </form>
-            `);
+            res.render("../public/register.pug");
         }
     };
 };
