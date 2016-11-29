@@ -1,25 +1,14 @@
 "use strict";
+const helper = require('../utils/helper');
 const constants = require('../utils/constants');
 
 module.exports = function(data) {
     return {
         getHome(req, res) {
-            let loginInfo;
-            if (req.isAuthenticated()) {
-                loginInfo = constants.loggedIn;
-            } else {
-                loginInfo = constants.notLoggedIn;
-            }
-            res.render('home', loginInfo)
+            res.render('home', helper.isAuthenticated(req))
         },
         getLogin(req, res) {
-            let loginInfo;
-            if (req.isAuthenticated()) {
-                loginInfo = constants.loggedIn;
-            } else {
-                loginInfo = constants.notLoggedIn;
-            }
-            res.render('login', loginInfo);
+            res.render('login', helper.isAuthenticated(req));
         },
         getProfile(req, res) {
             if (!req.isAuthenticated()) {

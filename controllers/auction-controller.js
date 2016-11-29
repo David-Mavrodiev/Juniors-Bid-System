@@ -1,6 +1,6 @@
 /*globals module require*/
 'use strict';
-const constants = require('../utils/constants');
+const helper = require('../utils/helper');
 
 module.exports = function (data) {
     return {
@@ -12,7 +12,7 @@ module.exports = function (data) {
                     res.render('auctions-list', {
                         result: {
                             auctions: auctions,
-                            isAuthenticated: isLoggedIn
+                            isAuthenticated: req.isAuthenticated()
                         }
                     })
                 })
@@ -26,18 +26,15 @@ module.exports = function (data) {
                     }
                     res.render('auction-details', {
                         result: {
-                            auction: auction
+                            auction: auction,
+                            isAuthenticated: req.isAuthenticated()
                         },
                     });
                 })
         },
         getCreate(req, res){
             if (req.isAuthenticated()) {
-                res.render('create-auction', {
-                    result: {
-                        isAuthenticated: constants.loggedIn.result.isAuthenticated
-                    }
-                });
+                res.render('create-auction', helper.isAuthenticated(req));
             }
             else {
                 res.status(401)
