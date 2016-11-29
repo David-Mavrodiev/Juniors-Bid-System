@@ -1,0 +1,24 @@
+extends index.pug
+
+block content
+    .container
+        .row
+            .col-md-6.col-md-offset-3
+                .panel.panel-login
+                    .panel-heading
+                        .row
+                            .col-xs-6
+                                span Create Auction
+                            hr
+                    .panel-body
+                        .row
+                            .col-lg-12
+                                form#register-form(action='/auctions', method='POST', role='form', style='display: block;')
+                                    .form-group
+                                        input#auction-title.form-control(type='text', name='title', tabindex='1', placeholder='Auction Title', value='')
+                                    .form-group
+                                        input#password.form-control(type='text', name='item', tabindex='2', placeholder='Auction Item')
+                                    .form-group
+                                        .row
+                                            .col-sm-6.col-sm-offset-3
+                                                input#register-submit.btn-success.form-control.btn.btn-register(type='submit', name='create-submit', tabindex='4', value='Create Auction')

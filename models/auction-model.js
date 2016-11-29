@@ -11,9 +11,10 @@ let schema = new mongoose.Schema({
         type: String,
         required: true
     },
-    bidders: [{
-        type: String
-    }]
+    creator: {
+        type: String,
+        required: true
+    }
 });
 
 mongoose.model("Auction", schema);

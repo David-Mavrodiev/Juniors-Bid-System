@@ -26,7 +26,6 @@ module.exports = function(data) {
                 res.status(401).redirect('/unauthorized', constants.notLoggedIn);
             } else {
                 const user = req.user;
-                console.log(user.image);
                 res.render("profile", {
                     result: {
                         username: user.username,

@@ -31,9 +31,23 @@ module.exports = function (data) {
                     });
                 })
         },
+        getCreate(req, res){
+            if (req.isAuthenticated()) {
+                res.render('create-auction', {
+                    result: {
+                        isAuthenticated: constants.loggedIn.result.isAuthenticated
+                    }
+                });
+            }
+            else {
+                res.status(401)
+                    .redirect('/unauthorized');
+            }
+        },
         create(req, res) {
             let body = req.body;
-            data.createAuction(body.name, body.item, body.bidders)
+            let user = req.user;
+            data.createAuction(body.title, body.item, user.username)
                 .then(() => {
                     res.redirect('/auctions');
                 });

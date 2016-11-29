@@ -34,6 +34,8 @@ html(lang='en')
             span.icon-bar
           a.navbar-brand(href='/home') BID SYSTEM
           a.navbar-brand(href='/auctions') All Auctions
+          if result.isAuthenticated
+            a.navbar-brand(href='/auctions/create') Create Auction
         // Collect the nav links, forms, and other content for toggling
         #bs-example-navbar-collapse-1.collapse.navbar-collapse
           .row
@@ -50,10 +52,10 @@ html(lang='en')
     // Page Content
     .container
       // Jumbotron Header
-      header.jumbotron.hero-spacer
+
       //  h1 BID SYSTEM
       //  p In our system you can take part in many different auctions and you may won it.
-      hr
+
       // Main content
       block content
       hr

@@ -27,8 +27,8 @@ module.exports = function (models) {
                 });
             });
         },
-        createAuction: function (name, item, bidders) {
-            let auction = new Auction({name, item, bidders});
+        createAuction: function (name, item, creator) {
+            let auction = new Auction({name, item, creator});
             return new Promise((resolve, reject) => {
                 auction.save(err => {
                     if (err) {

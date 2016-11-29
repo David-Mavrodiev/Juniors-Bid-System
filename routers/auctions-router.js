@@ -9,6 +9,7 @@ module.exports = function (app, data) {
 
     let router = express.Router();
     router.get('/', controller.getAll);
+    router.get('/create', controller.getCreate);
     router.get('/:id', controller.getById);
     router.post('/', controller.create);
 
