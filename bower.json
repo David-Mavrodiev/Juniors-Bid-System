@@ -14,5 +14,8 @@
     "public/bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "socket.io": "^1.7.1"
+  }
 }

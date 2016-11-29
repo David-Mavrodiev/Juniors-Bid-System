@@ -14,7 +14,4 @@ app.use(cookieParser());
 app.use(session({ secret: 'purple unicorn' }));
 app.use("/static", express.static("public"));
 
-require('../passport/')(app);
-require('../../routers/users-router')(app);
-
 module.exports = app;

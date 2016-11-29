@@ -1,31 +1,19 @@
-/*globals require module*/
-
-const constants = require("../utils/constants");
-const mongoose = require("mongoose");
-
-mongoose.connect(constants.usersConnectionString);
-
-const db = mongoose.connection;
-
-db.on("error", (err) => {
-    console.log("Error with connection: " + err);
-});
-
-db.on("open", () => {
-    console.log("Successfully connected to database");
-});
-
-module.exports = (User) => {
+module.exports = (models) => {
+    let User = models.User;
     return {
-        findUserByUsername: function (name) {
-            let query = User.findOne()
-                .where({
-                    username: new RegExp(name)
-                });
+        findUserByUsername: function(name) {
+            return new Promise((resolve, reject) => {
 
-            return Promise.resolve(query.exec());
+                User.findOne({ username: new RegExp(name) }, function(err, user) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(user);
+                    }
+                });
+            })
         },
-        createUser: function (obj) {
+        createUser: function(obj) {
             //console.log(`Username: ${username}, Password: ${password}`);
             const user = new User({
                 username: obj.username,
@@ -34,6 +22,17 @@ module.exports = (User) => {
             });
 
             return Promise.resolve(user.save());
-        }
+        },
+        getAllUsers: function() {
+            return new Promise((resolve, reject) => {
+                User.find((err, users) => {
+                    if (err) {
+                        return reject(err)
+                    }
+
+                    return resolve(users);
+                })
+            });
+        },
     };
 };

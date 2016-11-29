@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 
-module.exports = function (app, data) {
+module.exports = function(app, data) {
     //Magic happens here, please don't be offensive
     fs.readdirSync('./routers')
         .filter(x => x.includes('-router')) //loads only files that ends on '-data' ex. 'auctions-data.js'

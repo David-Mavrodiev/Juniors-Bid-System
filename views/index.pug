@@ -70,6 +70,10 @@ html(lang='en')
     // Bootstrap Core JavaScript
     script(src='/static/js/bootstrap.min.js')
     // Chat
-    script(src='/static/js/chat.js')
+    // Chat
+    if result.isAuthenticated
+        script(src='/socket.io/socket.io.js')
+        script(src='static/js/chat-draw.js')
+        script(src='static/js/socket-io-chat.js')
     // Logout
     script(src='/static/js/logout.js')

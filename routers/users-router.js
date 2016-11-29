@@ -2,15 +2,12 @@
 
 const router = require("express").Router(),
     createAuthController = require("../controllers/auth-controller"),
-    createUsersController = require("../controllers/users-controller"),
-    data = require("../data"),
-    passport = require("passport"),
-    User = require("../models/user-model");
+    createUsersController = require("../controllers/users-controller");
 
-const authController = createAuthController(require("../data/users-data")(User)),
-    usersController = createUsersController(require("../data/users-data")(User));
+module.exports = (app, data) => {
+    const authController = createAuthController(data),
+        usersController = createUsersController(data);
 
-module.exports = app => {
     router
         .get('/', usersController.getHome)
         .get('/home', usersController.getHome)
@@ -19,7 +16,6 @@ module.exports = app => {
         .get('/register', usersController.getRegister)
         .post('/register', authController.register)
         .get('/profile', usersController.getProfile)
-        .post('/logout', authController.logout)
         .get('/unauthorized', usersController.getUnauthorized);
 
     app.use(router);
