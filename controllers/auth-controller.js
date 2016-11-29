@@ -58,7 +58,7 @@ module.exports = function (data) {
         },
         logout(req, res) {
             req.logout();
-            res.redirect('/home');
+            res.send({ redirectUrl: '/home' });
         },
         register(req, res, next) {
             data.findUserByUsername(req.body.username)
