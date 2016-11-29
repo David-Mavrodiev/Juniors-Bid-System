@@ -3,7 +3,7 @@
 const secretWord = "secret";
 const port = 3001;
 const usersConnectionString = "mongodb://localhost:27017/Users";
-const auctionsConnectionString = "mongodb://localhost:27017/Auctions";
+const auctionsConnectionString = "mongodb://localhost:27017/Users";
 const loggedIn = {
     result: {
         isAuthenticated: true

@@ -5,7 +5,7 @@ const app = require("./config/app");
 const data = require('./data')(constants);
 require('./routers')(app,data);
 //
-// // For testing purpose!!
+// For testing purpose!!
 // data.createAuction("Prodaam bulka",'bulka',['az','david','drugiq kircho','milen','merhat']);
 // data.createAuction("Prodaam bulka",'bulka',['az','david','drugiq kircho','milen','merhat']);
 // data.createAuction("Prodaam bulka",'bulka',['az','david','drugiq kircho','milen','merhat']);

@@ -5,9 +5,11 @@ block content
         .row
             each auction in result.auctions
                 div.auction
-                    h1= 'Title:' + auction.name
+                    h1= 'Title:'
+                        a(href='auctions/'+auction.id)= auction.name
                     h2= 'Item For sale:' + auction.item
                     h3='Bidders:'
+
                     each bidder in auction.bidders
                         span= bidder + ', '
     // Loaded scripts

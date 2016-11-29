@@ -1,3 +1,14 @@
-//
-   Created by kikop on 11/24/2016.
+extends index
 
+block content
+    .container
+        .row
+            div.auction
+                h1= 'Title:' + result.auction.name
+                h2= 'Item For sale:' + result.auction.item
+                h3='Bidders:'
+                each bidder in result.auction.bidders
+                    span= bidder + ', '
+    // Loaded scripts
+    script(src='static/js/jquery.js')
+    script(src='static/js/bootstrap.min.js')

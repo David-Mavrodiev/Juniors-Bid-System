@@ -20,12 +20,14 @@ module.exports = function (data) {
         getById(req, res) {
             data.getAuctionById(req.params.id)
                 .then(auction => {
-                    if (auction === null) {
+                    if (auction === null || auction === undefined) {
                         return res.status(404)
                             .redirect('/error');
                     }
                     res.render('auction-details', {
-                        result: auction,
+                        result: {
+                            auction: auction
+                        },
                     });
                 })
         },
