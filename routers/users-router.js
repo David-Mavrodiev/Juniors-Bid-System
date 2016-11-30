@@ -17,7 +17,8 @@ module.exports = (app, data) => {
         .post('/register', authController.register)
         .get('/profile', usersController.getProfile)
         .post('/logout', authController.logout)
-        .get('/unauthorized', usersController.getUnauthorized);
+        .get('/unauthorized', usersController.getUnauthorized)
+        .post('/image', usersController.uploadImage);
 
     app.use(router);
 };

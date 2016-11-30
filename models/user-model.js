@@ -13,7 +13,7 @@ let userSchema = new mongoose.Schema({
         required: true
     },
     image: {
-        type: String
+        type: Buffer
     }
 });
 
