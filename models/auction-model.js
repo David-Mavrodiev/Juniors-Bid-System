@@ -1,6 +1,8 @@
 /*globals module require*/
 
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate');
+
 
 let schema = new mongoose.Schema({
     name: {
@@ -17,6 +19,7 @@ let schema = new mongoose.Schema({
     }
 });
 
+schema.plugin(mongoosePaginate);
 mongoose.model("Auction", schema);
 
 module.exports = mongoose.model('Auction');

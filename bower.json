@@ -16,6 +16,7 @@
     "tests"
   ],
   "dependencies": {
-    "socket.io": "^1.7.1"
+    "socket.io": "^1.7.1",
+    "isotope": "^3.0.1"
   }
 }

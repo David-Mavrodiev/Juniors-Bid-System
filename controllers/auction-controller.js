@@ -17,6 +17,29 @@ module.exports = function (data) {
                     })
                 })
         },
+        searchAll(req, res){
+            data.searchAllAuctions(req.params.search)
+                .then(auctions => {
+                    res.render('auctions-list', {
+                        result: {
+                            auctions: auctions,
+                            isAuthenticated: req.isAuthenticated()
+                        }
+                    })
+                })
+        }
+        ,
+        getPage(req, res){
+            data.getAuctionsPage(req.params.page)
+                .then(auctions => {
+                    res.render('auctions-list', {
+                        result: {
+                            auctions: auctions,
+                            isAuthenticated: req.isAuthenticated()
+                        }
+                    })
+                })
+        },
         getById(req, res) {
             data.getAuctionById(req.params.id)
                 .then(auction => {

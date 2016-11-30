@@ -16,6 +16,36 @@ module.exports = function (models) {
                 })
             });
         },
+        searchAllAuctions: function (value) {
+            return new Promise((resolve, reject) => {
+                Auction.find({'name': {"$regex": `${value}`}}, (err, auctions) => {
+                    if (err) {
+                        return reject(err)
+                    }
+
+                    return resolve(auctions);
+                })
+            });
+        },
+        getAuctionsPage: function (page) {
+            return new Promise((resolve, reject) => {
+                    Auction.paginate({}, {page: page, limit: 5}, function (err, result) {
+                        // result.docs
+                        // result.total
+                        // result.limit - 10
+                        // result.page - 3
+                        // result.pages
+
+                        console.log(result);
+                        if (err) {
+                            return reject(err);
+                        }
+
+                        return resolve(result.docs);
+                    })
+                }
+            );
+        },
         getAuctionById: function (id) {
             return new Promise((resolve, reject) => {
                 Auction.findOne({_id: id}, (err, auction) => {

@@ -6,39 +6,22 @@ block content
             #filter-panel.collapse.filter-panel
                 .panel.panel-default
                     .panel-body
-                        form.form-inline(role='form')
-                            .form-group
-                                label.filter-col(style='margin-right:0;', for='pref-perpage') Rows per page:
-                                select#pref-perpage.form-control
-                                    option(selected='selected', value='10') 10
-                                    option(value='20') 20
-                                    option(value='50') 50
-                                    option(value='100') 100
-                            // form group [rows]
-                            .form-group
-                                label.filter-col(style='margin-right:0;', for='pref-search') Search:
-                                input#pref-search.form-control.input-sm(type='text')
-                            // form group [search]
-                            .form-group
-                                label.filter-col(style='margin-right:0;', for='pref-orderby') Order by:
-                                select#pref-orderby.form-control
-                                    option Descendent
+                        .form-group
+                        label.filter-col(style='margin-right:0;', for='pref-search') Search:
+                            input#pref-search.form-control.input-sm(type='text')
                             // form group [order by]
-                            .form-group
-                                .checkbox(style='margin-left:10px; margin-right:10px;')
-                                    label
-                                        input(type='checkbox')
-                                        |  Remember parameters
-                                button.btn.btn-default.filter-col(type='submit')
-                                    span.glyphicon.glyphicon-record
-                                    |  Save Settings
+                        button.btn.btn-default.filter-col#button-send-search()
+                            span.glyphicon.glyphicon-record
+                            |  Search
             button.btn.btn-primary(type='button', data-toggle='collapse', data-target='#filter-panel')
                 span.glyphicon.glyphicon-cog
                 |  Advanced Search
-        div.row.auctions
+        div.row.auctions.grid
             each auction in result.auctions
-                div.auction
+                div.auction.element-item
                     h1= 'Title:'
-                        a(href='auctions/'+auction.id)= auction.name
+                        a(href='/auctions/'+auction.id)= auction.name
                     h2= 'Item For sale:' + auction.item
                     span= 'Creator: ' + auction.creator
+
+        input.btn.btn-success(type='button' id='load-more' value='Load More')
