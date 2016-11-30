@@ -1,11 +1,12 @@
 'use strict';
 
 const passport = require('passport');
+const fs = require('fs');
 
-module.exports = function (data) {
+function authController(data) {
     return {
         loginLocal(req, res, next) {
-            const auth = passport.authenticate('local', function (error, user) {
+            const auth = passport.authenticate('local', function(error, user) {
                 if (error) {
                     next(error);
                     return;
@@ -31,7 +32,7 @@ module.exports = function (data) {
             auth(req, res, next);
         },
         loginGithub(req, res, next) {
-            const auth = passport.authenticate('github', function (error, user) {
+            const auth = passport.authenticate('github', function(error, user) {
                 if (error) {
                     next(error);
                     return;
@@ -74,9 +75,10 @@ module.exports = function (data) {
 
                         data.createUser(user)
                             .then(dbUser => {
-                                // log in user after registering it
-                                // how to call this function? this seems weird
-                                require('./auth-controller')(data).loginLocal(req, res, next);
+                                fs.writeFileSync('./public/profileimages/' + user.username + '.jpg', new Buffer(fs.readFileSync('./public/img/default-user.jpg')));
+                                console.log('Writed new img');
+                                authController(data).loginLocal(req, res, next);
+                                //require('./auth-controller')(data).loginLocal(req, res, next);
                             })
                             .catch(error => res.status(500).json(error));
                     }
@@ -89,3 +91,5 @@ module.exports = function (data) {
         }
     }
 };
+
+module.exports = authController;

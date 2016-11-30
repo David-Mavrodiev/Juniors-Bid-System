@@ -284,6 +284,7 @@ function setVisibleToItems() {
     }
 }
 
+//TODO Fix
 function drawMessageBox(messageCollection) {
     closeMessageBox();
     popupMessageBox.html('');

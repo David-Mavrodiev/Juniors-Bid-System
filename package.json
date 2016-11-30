@@ -1,37 +1,38 @@
 {
-  "name": "juniors-bid-system",
-  "version": "1.0.0",
-  "description": "Bid system.",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./node_modules/.bin/nodemon app.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/David-Mavrodiev/Juniors-Bid-System.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/David-Mavrodiev/Juniors-Bid-System/issues"
-  },
-  "homepage": "https://github.com/David-Mavrodiev/Juniors-Bid-System#readme",
-  "dependencies": {
-    "body-parser": "^1.15.2",
-    "cookie-parser": "^1.4.3",
-    "express": "^4.14.0",
-    "express-session": "^1.14.2",
-    "isotope": "0.0.1-security",
-    "mongoose": "^4.7.0",
-    "mongoose-paginate": "^5.0.3",
-    "multer": "^1.2.0",
-    "passport": "^0.3.2",
-    "passport-local": "^1.0.0",
-    "pug": "^2.0.0-beta6",
-    "socket.io": "^1.7.1"
-  },
-  "devDependencies": {
-    "nodemon": "^1.11.0"
-  }
+    "name": "juniors-bid-system",
+    "version": "1.0.0",
+    "description": "Bid system.",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "./node_modules/.bin/nodemon app.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/David-Mavrodiev/Juniors-Bid-System.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/David-Mavrodiev/Juniors-Bid-System/issues"
+    },
+    "homepage": "https://github.com/David-Mavrodiev/Juniors-Bid-System#readme",
+    "dependencies": {
+        "body-parser": "^1.15.2",
+        "cookie-parser": "^1.4.3",
+        "express": "^4.14.0",
+        "express-session": "^1.14.2",
+        "isotope": "0.0.1-security",
+        "mongoose": "^4.7.0",
+        "mongoose-paginate": "^5.0.3",
+        "multer": "^1.2.0",
+        "passport": "^0.3.2",
+        "passport-local": "^1.0.0",
+        "pug": "^2.0.0-beta6",
+        "socket.io": "^1.7.1",
+        "simple-encryptor": "^1.1.0"
+    },
+    "devDependencies": {
+        "nodemon": "^1.11.0"
+    }
 }

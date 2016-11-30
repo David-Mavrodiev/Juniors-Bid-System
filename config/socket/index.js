@@ -21,12 +21,13 @@ module.exports = function(server, data) {
         console.log('Connected: ' + onlineUsers.length + ' users connected');
 
         socket.on('person-connected', function(data) {
-            socket.emit('draw-chat', { msg: 'draw chat' });
+            //socket.emit('draw-chat', { msg: 'draw chat' });
         });
 
         socket.on('disconnect', function(data) {
             onlineUsers.splice(onlineUsers.indexOf(socket), 1);
             console.log('Disconected: ' + onlineUsers.length + ' users connected');
         });
+
     });
 }
