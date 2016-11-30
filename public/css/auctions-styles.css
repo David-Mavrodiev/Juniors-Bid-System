@@ -1,6 +1,21 @@
+.search-bar{
+    display: inline-block;
+    width: 39%;
+    background: black;
+}
+.auctions{
+    width: 60%;
+    display: inline-block;
+    text-align: right;
+
+}
 .auction{
     display: inline-block;
     width: 30%;
     text-align: left;
     background-color: whitesmoke;
 }
+.filter-col{
+     padding-left:10px;
+     padding-right:10px;
+ }
