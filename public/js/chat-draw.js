@@ -16,47 +16,9 @@ let searchUserContainer = $('.search-user');
 let usersWindow = $('#users-window')
 let popupMessageBox = $('#popup-message');
 
-let usersOnline = [{
-        username: 'Amer',
-        imgUrl: 'https://img.ifcdn.com/images/191c7b9bd5340655f3dac23815fade532a24fb7e8ed6f82d23e59309f85c73d8_1.jpg',
-        online: true
-    },
-    {
-        username: 'Ivan',
-        imgUrl: 'http://bnetcmsus-a.akamaihd.net/cms/template_resource/fh/FHSCSCG9CXOC1462229977849.png',
-        online: true
-    },
-    {
-        username: 'Dragan',
-        imgUrl: 'http://bnetcmsus-a.akamaihd.net/cms/template_resource/fh/FHSCSCG9CXOC1462229977849.png',
-        online: true
-    },
-    {
-        username: 'Petar',
-        imgUrl: 'https://pbs.twimg.com/profile_images/378800000822867536/3f5a00acf72df93528b6bb7cd0a4fd0c.jpeg',
-        online: true
-    },
-    {
-        username: 'Wolfran',
-        imgUrl: 'http://bnetcmsus-a.akamaihd.net/cms/template_resource/fh/FHSCSCG9CXOC1462229977849.png',
-        online: true
-    },
-    {
-        username: 'Gasols',
-        imgUrl: 'http://bnetcmsus-a.akamaihd.net/cms/template_resource/fh/FHSCSCG9CXOC1462229977849.png',
-        online: true
-    },
-    {
-        username: 'Aferas',
-        imgUrl: 'http://bnetcmsus-a.akamaihd.net/cms/template_resource/fh/FHSCSCG9CXOC1462229977849.png',
-        online: false
-    },
-    {
-        username: 'Ivfasdan',
-        imgUrl: 'http://bnetcmsus-a.akamaihd.net/cms/template_resource/fh/FHSCSCG9CXOC1462229977849.png',
-        online: true
-    }
-]
+var messageController = {};
+
+let usersOnline = [];
 
 let localUser = null;
 
@@ -122,28 +84,7 @@ let chatBoxProperties = {
     height: 200
 }
 
-let messageCollectionData = [{
-    toUsername: 'Amer',
-    toImgUrl: 'https://img.ifcdn.com/images/191c7b9bd5340655f3dac23815fade532a24fb7e8ed6f82d23e59309f85c73d8_1.jpg',
-    online: true,
-    messages: [{
-            author: 'Wow Doge',
-            message: 'Sup m8'
-        },
-        {
-            author: 'Amer',
-            message: 'Hello mr Doge'
-        },
-        {
-            author: 'Wow Doge',
-            message: 'How are you'
-        },
-        {
-            author: 'Amer',
-            message: 'I am great thank you'
-        }
-    ]
-}]
+var messageCollectionData = []
 
 setStylesToItems();
 
@@ -158,12 +99,15 @@ $('body').on('click', function(event) {
 
         for (let i = 0; i < messageCollectionData.length; i += 1) {
             if (messageCollectionData[i].toUsername == toUser) {
-                drawMessageBox(messageCollectionData[i]);
+                drawMessageBox(messageCollectionData[i], localUser);
                 return;
             }
         }
 
         let toUserData = null;
+
+        console.log('To Users: ' + toUser);
+        console.log(usersOnline)
 
         for (let i = 0; i < usersOnline.length; i += 1) {
             if (usersOnline[i].username == toUser) {
@@ -180,7 +124,7 @@ $('body').on('click', function(event) {
 
         messageCollectionData.push(messageDataNow);
 
-        drawMessageBox(messageDataNow);
+        drawMessageBox(messageDataNow, localUser);
     }
 });
 
@@ -222,18 +166,21 @@ function chatBoxEvent(ev) {
         let fromUser = messageBox.attr('data-from-username');
         let toUser = messageBox.attr('data-to-username');
 
-        for (let i = 0; i < messageCollectionData.length; i += 1) {
-            if (messageCollectionData[i].toUsername == toUser) {
-                messageCollectionData[i].messages.push({
-                    author: fromUser,
-                    message: text
-                });
+        messageController.sendMessage(toUser, text)
+            /*
+            for (let i = 0; i < messageCollectionData.length; i += 1) {
+                if (messageCollectionData[i].toUsername == toUser) {
+                    messageCollectionData[i].messages.push({
+                        author: fromUser,
+                        message: text
+                    });
 
-                closeMessageBox();
-                drawMessageBox(messageCollectionData[i]);
-                break;
+                    closeMessageBox();
+                    drawMessageBox(messageCollectionData[i]);
+                    break;
+                }
             }
-        }
+            */
     }
 }
 
@@ -282,7 +229,7 @@ function setVisibleToItems() {
     }
 }
 
-//TODO Fix
+//TODO Fix so users cant be inspected
 function drawMessageBox(messageCollection, localUser) {
     closeMessageBox();
     popupMessageBox.html('');
@@ -416,8 +363,12 @@ function drawMessageBox(messageCollection, localUser) {
     exitButton.appendTo(popupMessageBox);
 }
 
-function drawOnlineUsers(onlineUsers, localUserData) {
+function drawOnlineUsers(onlineUsers, localUserData, messageCollection) {
     usersWindow.html('');
+
+    messageCollectionData = messageCollection;
+
+    usersOnline = onlineUsers;
 
     localUser = localUserData;
 

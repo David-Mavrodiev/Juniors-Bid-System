@@ -1,4 +1,6 @@
 $(function() {
+    let localUserData = null;
+
     let pathName = window.location.pathname;
 
     let socket = io.connect();
@@ -28,9 +30,44 @@ $(function() {
         socket.emit('person-connected', username);
 
         socket.on('draw-chat', function(chatData) {
-            console.log(chatData)
-            drawOnlineUsers(chatData.allUsersData, chatData.localUser);
-        });
-    }
+            localUserData = chatData.localUser;
 
+            drawOnlineUsers(chatData.allUsersData, chatData.localUser, chatData.chats);
+        });
+
+        messageController.sendMessage = function(toUser, message) {
+            socket.emit('send-message', { toUser, message });
+        }
+
+        socket.on('message-recive', function(message) {
+            for (let i = 0; i < messageCollectionData.length; i += 1) {
+                if (messageCollectionData[i].toUsername == message.toUsername) {
+                    messageCollectionData[i].messages = message.messages;
+                    drawMessageBox(messageCollectionData[i], localUserData);
+                    return;
+                }
+            }
+
+            messageCollectionData.push(message);
+            drawMessageBox(message, localUserData);
+        });
+
+        socket.on('person-online', (userData) => {
+            for (let i = 0; i < usersOnline.length; i += 1) {
+                if (usersOnline[i].username == userData.username) {
+                    usersOnline[i].online = true;
+                    break;
+                }
+            }
+
+            for (let i = 0; i < messageCollectionData.length; i += 1) {
+                if (messageCollectionData[i].toUsername == userData.username) {
+                    messageCollectionData[i].online = true;
+                    break;
+                }
+            }
+
+            drawOnlineUsers(usersOnline, localUserData, messageCollectionData);
+        })
+    }
 })

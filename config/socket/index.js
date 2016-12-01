@@ -4,23 +4,14 @@ const encryptor = require('simple-encryptor')(constants.cryptingKey);
 
 module.exports = function(server, data) {
     let io = require('socket.io').listen(server);
-
-    //User model
-    //{
-    //    username: 'Amer',
-    //    imgUrl: 'https://img.ifcdn.com/images/191c7b9bd5340655f3dac23815fade532a24fb7e8ed6f82d23e59309f85c73d8_1.jpg',
-    //    online: true
-    //}
     let onlineUsers = [];
+    let sockets = [];
 
     io.on('connection', function(socket) {
-        //data.getAllUsers().then(users => {
-        //    onlineUsers = users;
-        //}).catch(console.log);
-
         let userNow = null;
 
         socket.on('crypt-name', function(name) {
+            console.log('crypt-name');
             let cryptedName = encryptor.encrypt(name);
 
             socket.emit('crypted-name', cryptedName);
@@ -28,6 +19,7 @@ module.exports = function(server, data) {
 
         socket.on('decrypt-name', function(cryptedName) {
             let decryptedName = encryptor.decrypt(cryptedName);
+            console.log('decrypt-name');
 
             socket.emit('decrypted-name', decryptedName);
         })
@@ -36,6 +28,12 @@ module.exports = function(server, data) {
             let chatInfo = {
 
             };
+
+            socket.broadcast.emit('person-online', { username });
+
+            sockets.push(socket);
+
+            console.log('person-conected');
 
             data.getAllUsers().then(allUsers => {
                 let allUsersData = [];
@@ -63,20 +61,83 @@ module.exports = function(server, data) {
                     throw 'User with this name not found';
                 } else {
                     onlineUsers.push(userNow);
+
+                    socket.on('send-message', function(messageData) {
+                        console.log('send-message');
+
+                        data.addMessageToChat(userNow.username, messageData.toUser, userNow.username, messageData.message)
+                            .then(message => {
+                                let messageToSendToSender = {
+                                    toUsername: messageData.toUser,
+                                    toImgUrl: '/static/profileimages/' + messageData.toUser + '.jpg',
+                                    messages: message.messages,
+                                    online: onlineUsers.filter((user) => {
+                                        return user.username == messageData.toUser;
+                                    }).length > 0
+                                }
+                                socket.emit('message-recive', messageToSendToSender);
+
+                                //Checking if second user is online and sending message
+                                for (let i = 0; i < onlineUsers.length; i += 1) {
+                                    if (onlineUsers[i].username == messageData.toUser) {
+                                        let messageToSendToReciver = {
+                                            toUsername: userNow.username,
+                                            toImgUrl: '/static/profileimages/' + userNow.username + '.jpg',
+                                            messages: message.messages,
+                                            online: true
+                                        }
+
+                                        console.log('second user is online')
+                                        sockets[i].emit('message-recive', messageToSendToReciver);
+
+                                        break;
+                                    }
+                                }
+                            });
+                    })
                 }
 
                 console.log('Connected: ' + onlineUsers.length + ' users connected');
 
                 chatInfo.localUser = userNow;
                 chatInfo.allUsersData = allUsersData;
+                chatInfo.chats = [];
 
-                socket.emit('draw-chat', chatInfo);
+                data.findChatsByUsername(userNow.username)
+                    .then(chats => {
+                        for (let i = 0; i < chats.length; i += 1) {
+                            if (chats[i].firstUser == userNow.username) {
+                                chatInfo.chats.push({
+                                    toUsername: chats[i].secondUser,
+                                    toImgUrl: '/static/profileimages/' + chats[i].secondUser + '.jpg',
+                                    messages: chats[i].messages,
+                                    online: onlineUsers.filter((user) => {
+                                        return user.username == chats[i].secondUser;
+                                    }).length > 0
+                                })
+                            } else if (chats[i].secondUser == userNow.username) {
+                                chatInfo.chats.push({
+                                    toUsername: chats[i].firstUser,
+                                    toImgUrl: '/static/profileimages/' + chats[i].firstUser + '.jpg',
+                                    messages: chats[i].messages,
+                                    online: onlineUsers.filter((user) => {
+                                        return user.username == chats[i].firstUser;
+                                    }).length > 0
+                                })
+                            } else {
+                                throw 'Messages with user ' + userNow.username + ' Not found.';
+                            }
+                        }
+
+                        socket.emit('draw-chat', chatInfo);
+                    });
             });
         });
 
         socket.on('disconnect', function(data) {
             if (userNow) {
                 onlineUsers.splice(onlineUsers.indexOf(userNow), 1);
+                sockets.splice(sockets.indexOf(socket), 1);
                 console.log('Disconected: ' + onlineUsers.length + ' users connected');
             }
         });

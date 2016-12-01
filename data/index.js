@@ -11,7 +11,8 @@ module.exports = function(config) {
 
     let Auction = require('../models/auction-model');
     let User = require('../models/user-model');
-    let models = { Auction, User };
+    let Chat = require('../models/chat-model');
+    let models = { Auction, User, Chat };
 
     let data = {};
     //Magic happens here, please don't be offensive
