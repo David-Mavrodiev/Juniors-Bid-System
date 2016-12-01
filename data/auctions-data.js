@@ -7,12 +7,12 @@ module.exports = function (models) {
     return {
         getAllAuctions: function () {
             return new Promise((resolve, reject) => {
-                Auction.find((err, auctions) => {
+                Auction.paginate({},{page: 1, limit:10},(err, auctions) => {
                     if (err) {
                         return reject(err)
                     }
 
-                    return resolve(auctions);
+                    return resolve(auctions.docs);
                 })
             });
         },
@@ -29,14 +29,13 @@ module.exports = function (models) {
         },
         getAuctionsPage: function (page) {
             return new Promise((resolve, reject) => {
-                    Auction.paginate({}, {page: page, limit: 5}, function (err, result) {
+                    Auction.paginate({}, {page: page, limit: 10}, function (err, result) {
                         // result.docs
                         // result.total
                         // result.limit - 10
                         // result.page - 3
                         // result.pages
 
-                        console.log(result);
                         if (err) {
                             return reject(err);
                         }

@@ -32,7 +32,7 @@ module.exports = function (data) {
         getPage(req, res){
             data.getAuctionsPage(req.params.page)
                 .then(auctions => {
-                    res.render('auctions-list', {
+                    res.render('auctions-for-paging', {
                         result: {
                             auctions: auctions,
                             isAuthenticated: req.isAuthenticated()
