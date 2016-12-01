@@ -58,9 +58,7 @@ let usersOnline = [{
     }
 ]
 
-let localUser = {
-    username: 'Merhat'
-}
+let localUser = null;
 
 let isClosed = false;
 
@@ -251,7 +249,7 @@ function drawUsersContainer() {
             <div class="top">
                     <div id="popup-bar"></div>
                     <div id="my-profile">
-                        <img id="my-profile-image" src="http://i.dailymail.co.uk/i/pix/2016/04/13/00/331D901800000578-3536787-image-a-11_1460503122350.jpg">
+                        <img id="my-profile-image" src="">
                         <div id="my-status">
                             <div id="my-profile-name"></div>
                             <img id="my-profile-status-dot" src="http://www.clker.com/cliparts/R/d/z/v/H/1/neon-green-dot-hi.png" alt="">
@@ -285,7 +283,7 @@ function setVisibleToItems() {
 }
 
 //TODO Fix
-function drawMessageBox(messageCollection) {
+function drawMessageBox(messageCollection, localUser) {
     closeMessageBox();
     popupMessageBox.html('');
     popupMessageBox.css('display', '');
@@ -418,14 +416,13 @@ function drawMessageBox(messageCollection) {
     exitButton.appendTo(popupMessageBox);
 }
 
-function drawOnlineUsers(onlineUsers, messageCollection, localUserData) {
+function drawOnlineUsers(onlineUsers, localUserData) {
     usersWindow.html('');
 
     localUser = localUserData;
 
-    messageCollectionData = messageCollection;
-
     $('#my-profile-name').html(localUser.username);
+    $('#my-profile-image').attr('src', localUser.imgUrl);
 
     for (let i = 0; i < onlineUsers.length; i += 1) {
         let userBox = $('<div></div>');

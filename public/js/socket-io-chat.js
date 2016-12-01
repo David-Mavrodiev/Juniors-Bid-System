@@ -3,8 +3,6 @@ $(function() {
 
     let socket = io.connect();
 
-    /*
-
     if (pathName == '/profile') {
         let username = $('.username').html();
 
@@ -27,13 +25,12 @@ $(function() {
     }
 
     function setSocketRoutes(username) {
-        socket.emit('person-connected', {
-            username: username
-        });
+        socket.emit('person-connected', username);
 
         socket.on('draw-chat', function(chatData) {
-            drawOnlineUsers(chatData.users, chatData.messageCollectionData, chatData.localUserData);
+            console.log(chatData)
+            drawOnlineUsers(chatData.allUsersData, chatData.localUser);
         });
     }
-    */
+
 })

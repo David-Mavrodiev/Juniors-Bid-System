@@ -1,4 +1,6 @@
 const chatController = require('../../controllers/chat-controller');
+const constants = require('../../utils/constants');
+const encryptor = require('simple-encryptor')(constants.cryptingKey);
 
 module.exports = function(server, data) {
     let io = require('socket.io').listen(server);
@@ -16,17 +18,67 @@ module.exports = function(server, data) {
         //    onlineUsers = users;
         //}).catch(console.log);
 
-        onlineUsers.push(socket);
+        let userNow = null;
 
-        console.log('Connected: ' + onlineUsers.length + ' users connected');
+        socket.on('crypt-name', function(name) {
+            let cryptedName = encryptor.encrypt(name);
 
-        socket.on('person-connected', function(data) {
-            //socket.emit('draw-chat', { msg: 'draw chat' });
+            socket.emit('crypted-name', cryptedName);
+        })
+
+        socket.on('decrypt-name', function(cryptedName) {
+            let decryptedName = encryptor.decrypt(cryptedName);
+
+            socket.emit('decrypted-name', decryptedName);
+        })
+
+        socket.on('person-connected', function(username) {
+            let chatInfo = {
+
+            };
+
+            data.getAllUsers().then(allUsers => {
+                let allUsersData = [];
+
+                for (let i = 0; i < allUsers.length; i += 1) {
+                    if (allUsers[i].username == username) {
+                        userNow = {
+                            username,
+                            imgUrl: '/static/profileimages/' + username + '.jpg',
+                            online: true
+                        }
+                    } else {
+                        allUsersData.push({
+                            username: allUsers[i].username,
+                            imgUrl: '/static/profileimages/' + allUsers[i].username + '.jpg',
+                            online: onlineUsers.filter((user) => {
+                                return user.username == allUsers[i].username;
+                            }).length > 0
+                        });
+                    }
+                }
+
+                //TODO Handle
+                if (!userNow) {
+                    throw 'User with this name not found';
+                } else {
+                    onlineUsers.push(userNow);
+                }
+
+                console.log('Connected: ' + onlineUsers.length + ' users connected');
+
+                chatInfo.localUser = userNow;
+                chatInfo.allUsersData = allUsersData;
+
+                socket.emit('draw-chat', chatInfo);
+            });
         });
 
         socket.on('disconnect', function(data) {
-            onlineUsers.splice(onlineUsers.indexOf(socket), 1);
-            console.log('Disconected: ' + onlineUsers.length + ' users connected');
+            if (userNow) {
+                onlineUsers.splice(onlineUsers.indexOf(userNow), 1);
+                console.log('Disconected: ' + onlineUsers.length + ' users connected');
+            }
         });
 
     });
