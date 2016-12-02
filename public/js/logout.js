@@ -1,3 +1,4 @@
+/*globals $*/
 (function () {
     $('#logout-button').on('click', (e) => {
         e.preventDefault();
@@ -5,4 +6,4 @@
             window.location.href = data.redirectUrl;
         });
     });
-} ());
+}());

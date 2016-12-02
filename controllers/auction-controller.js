@@ -5,25 +5,40 @@ const helper = require('../utils/helper');
 module.exports = function (data) {
     return {
         getAll(req, res) {
-            let isLoggedIn = req.isAuthenticated();
+            const user = req.user;
+            let isAuthenticated = helper.isAuthenticated(req);
+            let imageUrl;
+
+            if (user) {
+                imageUrl = '/static/profileimages/' + user.username + '.jpg';
+            }
 
             data.getAllAuctions()
                 .then(auctions => {
                     res.render('auctions-list', {
                         result: {
                             auctions: auctions,
-                            isAuthenticated: req.isAuthenticated()
+                            isAuthenticated: req.isAuthenticated(),
+                            img: imageUrl
                         }
                     })
                 })
         },
         searchAll(req, res){
+            const user = req.user;
+            let isAuthenticated = helper.isAuthenticated(req);
+            let imageUrl;
+
+            if (user) {
+                imageUrl = '/static/profileimages/' + user.username + '.jpg';
+            }
             data.searchAllAuctions(req.params.search)
                 .then(auctions => {
                     res.render('auctions-list', {
                         result: {
                             auctions: auctions,
-                            isAuthenticated: req.isAuthenticated()
+                            isAuthenticated: req.isAuthenticated(),
+                            img: imageUrl
                         }
                     })
                 })
@@ -41,6 +56,12 @@ module.exports = function (data) {
                 })
         },
         getById(req, res) {
+            const user = req.user;
+            let imageUrl;
+
+            if (user) {
+                imageUrl = '/static/profileimages/' + user.username + '.jpg';
+            }
             data.getAuctionById(req.params.id)
                 .then(auction => {
                     if (auction === null || auction === undefined) {
@@ -50,14 +71,27 @@ module.exports = function (data) {
                     res.render('auction-details', {
                         result: {
                             auction: auction,
-                            isAuthenticated: req.isAuthenticated()
+                            isAuthenticated: req.isAuthenticated(),
+                            img: imageUrl
                         },
                     });
                 })
         },
         getCreate(req, res){
+            const user = req.user;
+            let imageUrl;
+
+            if (user) {
+                imageUrl = '/static/profileimages/' + user.username + '.jpg';
+            }
+
             if (req.isAuthenticated()) {
-                res.render('create-auction', helper.isAuthenticated(req));
+                res.render('create-auction', {
+                    result: {
+                        isAuthenticated: req.isAuthenticated(),
+                        img: imageUrl
+                    }
+                });
             }
             else {
                 res.status(401)
@@ -66,7 +100,8 @@ module.exports = function (data) {
         },
         create(req, res) {
             let body = req.body;
-            let user = req.user;
+            const user = req.user;
+
             data.createAuction(body.title, body.item, user.username)
                 .then(() => {
                     res.redirect('/auctions');

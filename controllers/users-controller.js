@@ -5,10 +5,23 @@ const multer = require('multer');
 const upload = multer().single('userPhoto');
 const fs = require('fs');
 
-module.exports = function(data) {
+module.exports = function (data) {
     return {
         getHome(req, res) {
-            res.render('home', helper.isAuthenticated(req))
+            const user = req.user;
+            let isAuthenticated = helper.isAuthenticated(req);
+            let imageUrl;
+
+            if (user) {
+                imageUrl = '/static/profileimages/' + user.username + '.jpg';
+            }
+
+            res.render('home', {
+                result: {
+                    isAuthenticated: req.isAuthenticated(),
+                    img: imageUrl
+                }
+            })
         },
         getLogin(req, res) {
             //TODO Fix if person is logged in dont allow him to visit login page
@@ -19,15 +32,18 @@ module.exports = function(data) {
                 res.status(401).redirect('/unauthorized', constants.notLoggedIn);
             } else {
                 const user = req.user;
+                let isAuthenticated = helper.isAuthenticated(req);
+                let imageUrl;
 
-                let imageUrl = '/static/profileimages/' + user.username + '.jpg';
-
+                if (user) {
+                    imageUrl = '/static/profileimages/' + user.username + '.jpg';
+                }
                 res.render("profile", {
                     result: {
                         username: user.username,
                         image: user.image,
-                        imageUrl: imageUrl,
-                        isAuthenticated: constants.loggedIn.result.isAuthenticated
+                        img: imageUrl,
+                        isAuthenticated: req.isAuthenticated(),
                     }
                 });
             }
@@ -40,7 +56,7 @@ module.exports = function(data) {
             res.render("register", constants.notLoggedIn);
         },
         uploadImage(req, res) {
-            upload(req, res, function(err) {
+            upload(req, res, function (err) {
                 if (err) {
                     return res.end(JSON.stringify(err));
                 }

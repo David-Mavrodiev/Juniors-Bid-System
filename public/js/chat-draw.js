@@ -88,7 +88,7 @@ var messageCollectionData = []
 
 setStylesToItems();
 
-$('body').on('click', function(event) {
+$('body').on('click', function (event) {
     let element = $(event.target);
     //alert($(event.target).attr('class'))
 
@@ -128,17 +128,17 @@ $('body').on('click', function(event) {
     }
 });
 
-btnClose.hover(function() {
+btnClose.hover(function () {
     btnClose.css('color', '#F8F8F8');
     btnClose.css('cursor', 'pointer');
 });
 
-btnClose.mouseout(function() {
+btnClose.mouseout(function () {
     btnClose.css('color', '#A8A8A8');
     btnClose.css('cursor', 'auto');
 })
 
-btnClose.on('click', function() {
+btnClose.on('click', function () {
     if (isClosed == false) {
         popupProperties.height = 55;
         btnClose.html('---');
@@ -157,7 +157,7 @@ btnClose.on('click', function() {
     setStylesToItems();
 })
 
-$('#search-user').on('keydown', function(ev) {
+$('#search-user').on('keydown', function (ev) {
     let searchedValue = $(ev.target).val();
 
 
@@ -332,7 +332,7 @@ function drawMessageBox(messageCollection, localUser) {
         messageContent.appendTo(chatBox);
     }
 
-    chatBox.animate({ scrollTop: $(document).height() }, "fast");
+    chatBox.animate({scrollTop: $(document).height()}, "fast");
 
     chatBox.appendTo(popupMessageBox);
 

@@ -15,6 +15,7 @@ html(lang='en')
     link(href='/static/css/profile-styles.css', rel='stylesheet')
     link(href='/static/css/auctions-styles.css', rel='stylesheet')
     link(href='/static/css/index-styles.css', rel='stylesheet')
+    link(href='/static/css/chat-styles.css', rel='stylesheet')
     link(href='http://fonts.googleapis.com/css?family=Open+Sans', rel='stylesheet', type='text/css')
     // HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
     // WARNING: Respond.js doesn't work if you view the page via file://
@@ -38,15 +39,23 @@ html(lang='en')
             a.navbar-brand(href='/auctions/create') Create Auction
         // Collect the nav links, forms, and other content for toggling
         #bs-example-navbar-collapse-1.collapse.navbar-collapse
-          .row
-            .pull-right
-              ul.nav.navbar-nav
-                li
-                  if result.isAuthenticated
-                    a#profile-button(href='/profile', style="display: inline-block;") Profile
-                    a#logout-button(href='/logout', style="display: inline-block;") Log out
-                  else
-                    a#login-button(href='/login') Log in / Sign up
+            .row
+                .pull-right
+                    ul.nav.navbar-nav
+                        li
+                            if result.isAuthenticated
+                                div.open-info
+                                    div.open-info-greeting
+                                        p Hello, Fiki!
+                                        hr
+                                    span.info-usernamea
+                                        a(href='/profile', style="display: inline-block;") Profile
+                                    br
+                                    span.info-logouta
+                                        a#logout-button(href='/logout', style="display: inline-block;") Log out
+                                img.mini-profile-image(src=result.img)
+                            else
+                                a#login-button(href='/login') Log in / Sign up
         // /.navbar-collapse
       // /.container
     // Page Content
@@ -73,8 +82,8 @@ html(lang='en')
     // Chat
     if result.isAuthenticated
         script(src='/socket.io/socket.io.js')
-        script(src='static/js/chat-draw.js')
-        script(src='static/js/socket-io-chat.js')
+        script(src='/static/js/chat-draw.js')
+        script(src='/static/js/socket-io-chat.js')
     // Logout
     script(src='/static/js/logout.js')
     script(src='/static/bower_components/jquery/dist/jquery.js')
@@ -82,3 +91,4 @@ html(lang='en')
     //script(src='/static/js/infinite-scroll.js')
     script(src='/static/js/auctions-scroll.js')
     script(src='/static/js/search.js')
+    script(src='/static/js/main.js')
