@@ -2,6 +2,8 @@
 
 const passport = require('passport');
 const fs = require('fs');
+const constants = require('../utils/constants');
+const encryptor = require('simple-encryptor')(constants.cryptingKey);
 
 function authController(data) {
     return {
@@ -67,9 +69,11 @@ function authController(data) {
                     if (user) {
                         res.redirect('/register');
                     } else {
+                        const encryptedPassword = encryptor.encrypt(req.body.password);
+
                         const user = {
                             username: req.body.username,
-                            password: req.body.password,
+                            password: encryptedPassword,
                             image: req.body.image
                         };
 
