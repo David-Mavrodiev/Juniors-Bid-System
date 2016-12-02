@@ -1,10 +1,14 @@
+const helper = require('../utils/helper');
+
 module.exports = (models) => {
     let User = models.User;
     return {
         findUserByUsername: function(name) {
+            name = helper.preventUserInjectionAttack(name);
+
             return new Promise((resolve, reject) => {
 
-                User.findOne({ username: new RegExp(name) }, function(err, user) {
+                User.findOne({ username: name }, function(err, user) {
                     if (err) {
                         reject(err);
                     } else {
@@ -14,6 +18,8 @@ module.exports = (models) => {
             })
         },
         createUser: function(obj) {
+            obj.username = helper.preventUserInjectionAttack(obj.username);
+
             //console.log(`Username: ${username}, Password: ${password}`);
             const user = new User({
                 username: obj.username,
@@ -35,6 +41,8 @@ module.exports = (models) => {
         },
         //TODO: Fix server crashing when clicking upload without uploading a picture
         updateUserImage: function(username, image) {
+            username = helper.preventUserInjectionAttack(username);
+
             return new Promise((resolve, reject) => {
                 User.findOneAndUpdate({
                     username: username

@@ -1,13 +1,14 @@
 /*globals module Promise*/
 'use strict';
+const helper = require('../utils/helper');
 
-module.exports = function (models) {
+module.exports = function(models) {
     let Auction = models.Auction;
 
     return {
-        getAllAuctions: function () {
+        getAllAuctions: function() {
             return new Promise((resolve, reject) => {
-                Auction.paginate({},{page: 1, limit:10},(err, auctions) => {
+                Auction.paginate({}, { page: 1, limit: 10 }, (err, auctions) => {
                     if (err) {
                         return reject(err)
                     }
@@ -16,9 +17,9 @@ module.exports = function (models) {
                 })
             });
         },
-        searchAllAuctions: function (value) {
+        searchAllAuctions: function(value) {
             return new Promise((resolve, reject) => {
-                Auction.find({'name': {"$regex": `${value}`}}, (err, auctions) => {
+                Auction.find({ 'name': { "$regex": `${value}` } }, (err, auctions) => {
                     if (err) {
                         return reject(err)
                     }
@@ -27,27 +28,26 @@ module.exports = function (models) {
                 })
             });
         },
-        getAuctionsPage: function (page) {
+        getAuctionsPage: function(page) {
             return new Promise((resolve, reject) => {
-                    Auction.paginate({}, {page: page, limit: 10}, function (err, result) {
-                        // result.docs
-                        // result.total
-                        // result.limit - 10
-                        // result.page - 3
-                        // result.pages
+                Auction.paginate({}, { page: page, limit: 10 }, function(err, result) {
+                    // result.docs
+                    // result.total
+                    // result.limit - 10
+                    // result.page - 3
+                    // result.pages
 
-                        if (err) {
-                            return reject(err);
-                        }
+                    if (err) {
+                        return reject(err);
+                    }
 
-                        return resolve(result.docs);
-                    })
-                }
-            );
+                    return resolve(result.docs);
+                })
+            });
         },
-        getAuctionById: function (id) {
+        getAuctionById: function(id) {
             return new Promise((resolve, reject) => {
-                Auction.findOne({_id: id}, (err, auction) => {
+                Auction.findOne({ _id: id }, (err, auction) => {
                     if (err) {
                         return reject(err);
                     }
@@ -56,8 +56,8 @@ module.exports = function (models) {
                 });
             });
         },
-        createAuction: function (name, item, creator) {
-            let auction = new Auction({name, item, creator});
+        createAuction: function(name, item, creator) {
+            let auction = new Auction({ name, item, creator });
             return new Promise((resolve, reject) => {
                 auction.save(err => {
                     if (err) {

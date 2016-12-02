@@ -21,6 +21,8 @@ function authController(data) {
                     });
                 }
 
+                console.log('LoginLocal');
+                console.log(user)
                 req.login(user, error => {
                     if (error) {
                         next(error);
@@ -73,16 +75,13 @@ function authController(data) {
 
                         const user = {
                             username: req.body.username,
-                            password: encryptedPassword,
-                            image: req.body.image
+                            password: encryptedPassword
                         };
 
                         data.createUser(user)
                             .then(dbUser => {
-                                fs.writeFileSync('./public/profileimages/' + user.username + '.jpg', new Buffer(fs.readFileSync('./public/img/default-user.jpg')));
-                                console.log('Writed new img');
+                                fs.writeFileSync('./public/profileimages/' + dbUser.username + '.jpg', new Buffer(fs.readFileSync('./public/img/default-user.jpg')));
                                 authController(data).loginLocal(req, res, next);
-                                //require('./auth-controller')(data).loginLocal(req, res, next);
                             })
                             .catch(error => res.status(500).json(error));
                     }
