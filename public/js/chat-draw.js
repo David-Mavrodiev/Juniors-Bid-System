@@ -157,6 +157,23 @@ btnClose.on('click', function() {
     setStylesToItems();
 })
 
+$('#search-user').on('keydown', function(ev) {
+    let searchedValue = $(ev.target).val();
+
+
+    let users = $('.profile-name');
+
+    for (let i = 0; i < users.length; i += 1) {
+        for (let j = 0; j < usersOnline.length; j += 1) {
+            if (users.eq(i).html().toLowerCase().indexOf(searchedValue.toLowerCase()) == -1) {
+                users.eq(i).closest('.user-box').css('display', 'none');
+            } else {
+                users.eq(i).closest('.user-box').css('display', '');
+            }
+        }
+    }
+});
+
 function chatBoxEvent(ev) {
     //Enter
     if (ev.which == 13) {
@@ -167,20 +184,6 @@ function chatBoxEvent(ev) {
         let toUser = messageBox.attr('data-to-username');
 
         messageController.sendMessage(toUser, text)
-            /*
-            for (let i = 0; i < messageCollectionData.length; i += 1) {
-                if (messageCollectionData[i].toUsername == toUser) {
-                    messageCollectionData[i].messages.push({
-                        author: fromUser,
-                        message: text
-                    });
-
-                    closeMessageBox();
-                    drawMessageBox(messageCollectionData[i]);
-                    break;
-                }
-            }
-            */
     }
 }
 
