@@ -19,10 +19,7 @@ let schema = new mongoose.Schema({
     },
     bidders: {
         type: [{
-            username: {
-                type: String,
-                unique: true
-            },
+            username: String,
             amount: Number
         }]
     },
