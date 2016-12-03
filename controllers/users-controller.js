@@ -52,12 +52,6 @@ function usersController(data) {
                     };
                 });
 
-                // x => {
-                //     auctionId: x.auctionId,
-                //     auctionTitle: x.auctionTitle,
-                //     amount: helper.formatMoney(x.amount, constants.siteCurrency.big, constants.siteCurrency.small)
-                // }
-
                 res.render("profile", {
                     result: {
                         username: req.user.username,
@@ -65,6 +59,7 @@ function usersController(data) {
                         imageUrl: imageUrl,
                         offers: offers,
                         isAuthenticated: req.isAuthenticated(),
+                        isAuthenticatedCurrent: req.isAuthenticated(),
                         user: req.user
                     },
                     error: helper.getErrorMessage(errorMessage)
@@ -84,7 +79,7 @@ function usersController(data) {
             res.render("register", constants.notLoggedIn);
         },
         uploadImage(req, res) {
-            upload(req, res, function (err) {
+            upload(req, res, function(err) {
                 if (err) {
                     return res.end(JSON.stringify(err));
                 } else if (!req.file) {
@@ -108,15 +103,23 @@ function usersController(data) {
             data.findUserByUsername(req.params.username).
                 then((user) => {
                     const imageUrl = '/static/profileimages/' + user.username + '.jpg';
-                    const offers = user.offers.map(x => helper.formatMoney(x.amount, constants.siteCurrency.big, constants.siteCurrency.small));
+
+                    const offers = req.user.offers.map((offer) => {
+                        return {
+                            auctionId: offer.auctionId,
+                            auctionTitle: offer.auctionTitle,
+                            amount: helper.formatMoney(offer.amount, constants.siteCurrency.big, constants.siteCurrency.small)
+                        };
+                    });
 
                     res.render('profile', {
                         result: {
-                            isAuthenticated: req.isAuthenticated() && user.username === req.user.username,
+                            isAuthenticated: req.isAuthenticated(),
+                            isAuthenticatedCurrent: req.isAuthenticated() && user.username === req.user.username,
                             username: user.username,
                             offers: offers,
                             imageUrl: imageUrl,
-                            user: user
+                            user: req.user
                         }
                     });
                 });

@@ -5,13 +5,13 @@ block content
     .fb-profile
       img.fb-image-lg(align='left', src='http://lorempixel.com/850/280/nightlife/5/', alt='Profile image example')
       img.fb-image-profile.thumbnail(align='left', src= result.imageUrl, alt='Profile image')
-      if result.isAuthenticated
+      if result.isAuthenticatedCurrent
         form#image-upload(enctype="multipart/form-data", method="post", action="/image")
           input.btn.btn-default.btn-xs(type="file", name="userPhoto")
           input.btn.btn-primary.btn-xs(type="submit", name="submit", value="Upload profile image")
       .fb-profile-text
         h1.username= result.username
-      if result.isAuthenticated
+      if result.isAuthenticatedCurrent
         h3 Offers:
         ul
           each offer in result.offers
