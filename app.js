@@ -2,7 +2,7 @@
 
 const constants = require("./utils/constants");
 const app = require("./config/app");
-const server = require('./config/server')(app, constants)
+const server = require('./config/server')(app, constants);
 const data = require('./data')(constants);
 const socketIo = require('./config/socket')(server, data);
 

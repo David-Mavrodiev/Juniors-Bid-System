@@ -7,3 +7,17 @@ block content
                 h1= 'Title:' + result.auction.name
                 h2= 'Item For sale:' + result.auction.item
                 span= 'Creator: ' + result.auction.creator
+                h2= 'Bidders:'
+                ul.col-xs-4
+                    each bidder in result.auction.bidders
+                        li.list-group-item
+                            a(target="_blank", href= '/profile/' + bidder.username)= bidder.username
+                            h5(style="display: inline-block; padding-left: 50px;")= 'Offer: ' + bidder.amount
+        hr
+        if result.isAuthenticated
+            .row
+                a#offer-button.btn.btn-default Make an offer
+                #offer-container(style="padding-top: 5px;display: none;")
+                    form.col-xs-2(method="post", action="/auctions/offer", role='form')
+                        input.form-control(type="text", name="amount", placeholder="Enter offer amount")
+                        input(type="submit" class="btn btn-success" value="Submit")

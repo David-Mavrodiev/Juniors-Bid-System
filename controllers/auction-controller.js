@@ -1,17 +1,14 @@
 /*globals module require*/
 'use strict';
 const helper = require('../utils/helper');
+const userUtils = require('./users-utils');
 
 module.exports = function (data) {
     return {
         getAll(req, res) {
-            const user = req.user;
-            let isAuthenticated = helper.isAuthenticated(req);
-            let imageUrl;
+            const username = req.user.image ? req.user.username : 'newuser';
 
-            if (user) {
-                imageUrl = '/static/profileimages/' + user.username + '.jpg';
-            }
+            const imageUrl = '/static/profileimages/' + username + '.jpg';
 
             data.getAllAuctions()
                 .then(auctions => {
@@ -19,32 +16,29 @@ module.exports = function (data) {
                         result: {
                             auctions: auctions,
                             isAuthenticated: req.isAuthenticated(),
-                            img: imageUrl
+                            imageUrl: imageUrl
                         }
                     })
                 })
         },
-        searchAll(req, res){
-            const user = req.user;
-            let isAuthenticated = helper.isAuthenticated(req);
-            let imageUrl;
+        searchAll(req, res) {
+            const username = req.user.image ? req.user.username : 'newuser';
 
-            if (user) {
-                imageUrl = '/static/profileimages/' + user.username + '.jpg';
-            }
+            const imageUrl = '/static/profileimages/' + username + '.jpg';
+
             data.searchAllAuctions(req.params.search)
                 .then(auctions => {
                     res.render('auctions-list', {
                         result: {
                             auctions: auctions,
                             isAuthenticated: req.isAuthenticated(),
-                            img: imageUrl
+                            imageUrl: imageUrl
                         }
                     })
                 })
         }
         ,
-        getPage(req, res){
+        getPage(req, res) {
             data.getAuctionsPage(req.params.page)
                 .then(auctions => {
                     res.render('auctions-for-paging', {
@@ -56,12 +50,10 @@ module.exports = function (data) {
                 })
         },
         getById(req, res) {
-            const user = req.user;
-            let imageUrl;
+            const username = req.user.image ? req.user.username : 'newuser';
 
-            if (user) {
-                imageUrl = '/static/profileimages/' + user.username + '.jpg';
-            }
+            const imageUrl = '/static/profileimages/' + username + '.jpg';
+
             data.getAuctionById(req.params.id)
                 .then(auction => {
                     if (auction === null || auction === undefined) {
@@ -72,24 +64,21 @@ module.exports = function (data) {
                         result: {
                             auction: auction,
                             isAuthenticated: req.isAuthenticated(),
-                            img: imageUrl
+                            imageUrl: imageUrl
                         },
                     });
                 })
         },
-        getCreate(req, res){
-            const user = req.user;
-            let imageUrl;
+        getCreate(req, res) {
+            const username = req.user.image ? req.user.username : 'newuser';
 
-            if (user) {
-                imageUrl = '/static/profileimages/' + user.username + '.jpg';
-            }
+            const imageUrl = '/static/profileimages/' + username + '.jpg';
 
             if (req.isAuthenticated()) {
                 res.render('create-auction', {
                     result: {
                         isAuthenticated: req.isAuthenticated(),
-                        img: imageUrl
+                        imageUrl: imageUrl
                     }
                 });
             }
@@ -105,6 +94,36 @@ module.exports = function (data) {
             data.createAuction(body.title, body.item, user.username)
                 .then(() => {
                     res.redirect('/auctions');
+                });
+        },
+        handleOffer(req, res) {
+            const url = req.get('referer');
+            const auctionId = url.substr(url.lastIndexOf('/') + 1);
+            data.getAuctionById(auctionId)
+                .then((auction) => {
+                    if (auction.bidders.map(x => x.username).includes(req.user.username)) {
+                        data.updateBidderOffer(auction._id, req.user.username, req.body.amount)
+                            .then((editedAuction) => {
+                                userUtils.updateUserOffer(req.user.username, editedAuction._id, req.body.amount);
+                                res.redirect(url);
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    } else {
+                        data.addBidderToAuction(auction._id, req.user.username, req.body.amount)
+                            .then((editedAuction) => {
+                                userUtils.addUserOffer(req.user.username, {
+                                    auctionId: editedAuction._id,
+                                    auctionTitle: editedAuction.name,
+                                    amount: req.body.amount
+                                });
+                                res.redirect(url);
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    }
                 });
         }
     }

@@ -16,6 +16,7 @@ module.exports = (app, data) => {
         .get('/register', usersController.getRegister)
         .post('/register', authController.register)
         .get('/profile', usersController.getProfile)
+        .get('/profile/:username', usersController.getProfileByUsername)
         .post('/logout', authController.logout)
         .get('/unauthorized', usersController.getUnauthorized)
         .post('/image', usersController.uploadImage);

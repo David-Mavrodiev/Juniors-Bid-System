@@ -2,11 +2,11 @@
 'use strict';
 const helper = require('../utils/helper');
 
-module.exports = function(models) {
+module.exports = function (models) {
     let Auction = models.Auction;
 
     return {
-        getAllAuctions: function() {
+        getAllAuctions: function () {
             return new Promise((resolve, reject) => {
                 Auction.paginate({}, { page: 1, limit: 10 }, (err, auctions) => {
                     if (err) {
@@ -17,7 +17,7 @@ module.exports = function(models) {
                 })
             });
         },
-        searchAllAuctions: function(value) {
+        searchAllAuctions: function (value) {
             return new Promise((resolve, reject) => {
                 Auction.find({ 'name': { "$regex": `${value}` } }, (err, auctions) => {
                     if (err) {
@@ -28,9 +28,9 @@ module.exports = function(models) {
                 })
             });
         },
-        getAuctionsPage: function(page) {
+        getAuctionsPage: function (page) {
             return new Promise((resolve, reject) => {
-                Auction.paginate({}, { page: page, limit: 10 }, function(err, result) {
+                Auction.paginate({}, { page: page, limit: 10 }, function (err, result) {
                     // result.docs
                     // result.total
                     // result.limit - 10
@@ -45,7 +45,7 @@ module.exports = function(models) {
                 })
             });
         },
-        getAuctionById: function(id) {
+        getAuctionById: function (id) {
             return new Promise((resolve, reject) => {
                 Auction.findOne({ _id: id }, (err, auction) => {
                     if (err) {
@@ -56,7 +56,7 @@ module.exports = function(models) {
                 });
             });
         },
-        createAuction: function(name, item, creator) {
+        createAuction: function (name, item, creator) {
             let auction = new Auction({ name, item, creator });
             return new Promise((resolve, reject) => {
                 auction.save(err => {
@@ -66,6 +66,44 @@ module.exports = function(models) {
 
                     return resolve(auction);
                 })
+            });
+        },
+        addBidderToAuction: function (auctionId, username, amount) {
+            return new Promise((resolve, reject) => {
+                Auction.findOneAndUpdate({
+                    _id: auctionId
+                }, {
+                        $push: {
+                            bidders: {
+                                username: username,
+                                amount: amount
+                            }
+                        }
+                    }, (err, auction) => {
+                        if (err) {
+                            return reject(err);
+                        }
+
+                        return resolve(auction);
+                    });
+            });
+        },
+        updateBidderOffer: function (auctionId, bidderUsername, newOffer) {
+            return new Promise((resolve, reject) => {
+                Auction.findOneAndUpdate({
+                    _id: auctionId,
+                    'bidders.username': bidderUsername
+                }, {
+                        $set: {
+                            'bidders.$.amount': newOffer
+                        }
+                    }, (err, auction) => {
+                        if (err) {
+                            return reject(err);
+                        }
+
+                        return resolve(auction);
+                    });
             });
         }
     }

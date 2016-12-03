@@ -19,7 +19,7 @@ module.exports = function (data) {
             res.render('home', {
                 result: {
                     isAuthenticated: req.isAuthenticated(),
-                    img: imageUrl
+                    imageUrl: imageUrl
                 }
             })
         },
@@ -31,18 +31,16 @@ module.exports = function (data) {
             if (!req.isAuthenticated()) {
                 res.status(401).redirect('/unauthorized', constants.notLoggedIn);
             } else {
-                const user = req.user;
-                let isAuthenticated = helper.isAuthenticated(req);
-                let imageUrl;
+                const username = req.user.image ? req.user.username : 'newuser';
 
-                if (user) {
-                    imageUrl = '/static/profileimages/' + user.username + '.jpg';
-                }
+                const imageUrl = '/static/profileimages/' + username + '.jpg';
+
                 res.render("profile", {
                     result: {
-                        username: user.username,
-                        image: user.image,
-                        img: imageUrl,
+                        username: req.user.username,
+                        image: req.user.image,
+                        imageUrl: imageUrl,
+                        offers: req.user.offers,
                         isAuthenticated: req.isAuthenticated(),
                     }
                 });
@@ -67,6 +65,29 @@ module.exports = function (data) {
                         res.redirect('/profile');
                     });
             });
+        },
+        createOffer(username, offer) {
+            data.addOffer(username, offer);
+        },
+        updateOffer(username, auctionId, newAmount) {
+            data.updateUserOffer(username, auctionId, newAmount);
+        },
+        getProfileByUsername(req, res) {
+            data.findUserByUsername(req.params.username).
+                then((user) => {
+                    const username = req.user.image ? req.user.username : 'newuser';
+
+                    const imageUrl = '/static/profileimages/' + username + '.jpg';
+
+                    res.render('profile', {
+                        result: {
+                            isAuthenticated: req.isAuthenticated(),
+                            username: user.username,
+                            offers: user.offers,
+                            imageUrl: imageUrl
+                        }
+                    });
+                });
         }
     };
 };

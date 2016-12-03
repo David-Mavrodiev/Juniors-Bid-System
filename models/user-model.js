@@ -14,6 +14,13 @@ let userSchema = new mongoose.Schema({
     },
     image: {
         type: Buffer
+    },
+    offers: {
+        type: [{
+            auctionId: String,
+            auctionTitle: String,
+            amount: Number
+        }]
     }
 });
 

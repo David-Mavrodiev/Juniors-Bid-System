@@ -16,6 +16,15 @@ let schema = new mongoose.Schema({
     creator: {
         type: String,
         required: true
+    },
+    bidders: {
+        type: [{
+            username: {
+                type: String,
+                unique: true
+            },
+            amount: Number
+        }]
     }
 });
 
