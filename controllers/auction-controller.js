@@ -5,6 +5,7 @@ const constants = require('../utils/constants');
 const multer = require('multer');
 const upload = multer().single('auctionPhoto');
 const fs = require('fs');
+const moment = require('moment');
 
 function auctionController(data) {
     const usersController = require('./users-controller')(data);
@@ -114,13 +115,22 @@ function auctionController(data) {
             let body = req.body;
             const user = req.user;
 
-            upload(req, res, function(err) {
+            upload(req, res, function (err) {
                 if (err) {
                     return res.end(JSON.stringify(err));
                 } else if (!req.file) {
                     auctionController(data).getCreate(req, res, 'You must select an image file!');
                 } else {
-                    data.createAuction(req.body.title, req.body.item, req.user.username)
+
+                    let dateCreated = moment();
+                    let dateEnd = moment(dateCreated);
+
+                    dateEnd.add(+req.body.end, 'hours');
+
+                    dateCreated = dateCreated.format('LT');
+                    dateEnd = dateEnd.format('LT');
+
+                    data.createAuction(req.body.title, req.body.item, req.user.username, dateCreated, dateEnd)
                         .then((auction) => {
                             console.log('creating auction 2');
                             fs.writeFileSync('./public/auctionimages/' + auction._id + '.jpg', new Buffer(req.file.buffer));

@@ -17,6 +17,14 @@ let schema = new mongoose.Schema({
         type: String,
         required: true
     },
+    dateCreated:{
+        type: String,
+        required:true
+    },
+    endDate:{
+        type: String,
+        required: true
+    },
     bidders: {
         type: [{
             username: String,
