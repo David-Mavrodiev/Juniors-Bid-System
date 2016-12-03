@@ -71,8 +71,8 @@ body {
     margin: 3px 0;
 }
 .mini-profile-image {
-    width: 4vw;
-    height: 4vw;
+    width: 48px;
+    height: 48px;
     border: 2px solid darkgray;
     border-radius: 50%;
     vertical-align: middle;
