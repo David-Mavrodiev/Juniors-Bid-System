@@ -19,7 +19,8 @@ module.exports = function (data) {
                         result: {
                             auctions: auctions,
                             isAuthenticated: req.isAuthenticated(),
-                            img: imageUrl
+                            img: imageUrl,
+                            user: user
                         }
                     })
                 })
@@ -38,7 +39,8 @@ module.exports = function (data) {
                         result: {
                             auctions: auctions,
                             isAuthenticated: req.isAuthenticated(),
-                            img: imageUrl
+                            img: imageUrl,
+                            user: user
                         }
                     })
                 })
@@ -72,7 +74,8 @@ module.exports = function (data) {
                         result: {
                             auction: auction,
                             isAuthenticated: req.isAuthenticated(),
-                            img: imageUrl
+                            img: imageUrl,
+                            user: user
                         },
                     });
                 })
@@ -89,7 +92,8 @@ module.exports = function (data) {
                 res.render('create-auction', {
                     result: {
                         isAuthenticated: req.isAuthenticated(),
-                        img: imageUrl
+                        img: imageUrl,
+                        user: user
                     }
                 });
             }

@@ -19,7 +19,8 @@ module.exports = function (data) {
             res.render('home', {
                 result: {
                     isAuthenticated: req.isAuthenticated(),
-                    img: imageUrl
+                    img: imageUrl,
+                    user: user
                 }
             })
         },
@@ -44,6 +45,7 @@ module.exports = function (data) {
                         image: user.image,
                         img: imageUrl,
                         isAuthenticated: req.isAuthenticated(),
+                        user: user
                     }
                 });
             }
