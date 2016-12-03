@@ -6,6 +6,7 @@ const constants = require('../utils/constants');
 const encryptor = require('simple-encryptor')(constants.cryptingKey);
 
 function authController(data) {
+    const usersController = require('./users-controller')(data);
     return {
         loginLocal(req, res, next) {
             const auth = passport.authenticate('local', function(error, user) {
@@ -15,14 +16,11 @@ function authController(data) {
                 }
 
                 if (!user) {
-                    res.json({
-                        success: false,
-                        message: 'Invalid name or password!'
-                    });
+
+                    usersController.getLogin(req, res, 'Invalid username or password!');
+                    return;
                 }
 
-                console.log('LoginLocal');
-                console.log(user)
                 req.login(user, error => {
                     if (error) {
                         next(error);
@@ -69,7 +67,7 @@ function authController(data) {
             data.findUserByUsername(req.body.username)
                 .then((user) => {
                     if (user) {
-                        res.redirect('/register');
+                        usersController.getRegister(req, res, 'User with this username already exists!');
                     } else {
                         const encryptedPassword = encryptor.encrypt(req.body.password);
 

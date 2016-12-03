@@ -5,35 +5,44 @@ const multer = require('multer');
 const upload = multer().single('userPhoto');
 const fs = require('fs');
 
-module.exports = function (data) {
+function usersController(data) {
     return {
-        getHome(req, res) {
-            const user = req.user;
-            let isAuthenticated = helper.isAuthenticated(req);
-            let imageUrl;
-
-            if (user) {
-                imageUrl = '/static/profileimages/' + user.username + '.jpg';
+        getHome(req, res, errorMessage) {
+            let username, imageUrl;
+            if (req.isAuthenticated()) {
+                username = req.user.image ? req.user.username : 'newuser';
+                imageUrl = '/static/profileimages/' + username + '.jpg';
             }
 
             res.render('home', {
                 result: {
                     isAuthenticated: req.isAuthenticated(),
-                    imageUrl: imageUrl
-                }
+                    imageUrl: imageUrl,
+                    user: req.user
+                },
+                error: helper.getErrorMessage(errorMessage)
             })
         },
-        getLogin(req, res) {
-            //TODO Fix if person is logged in dont allow him to visit login page
-            res.render('login', helper.isAuthenticated(req));
-        },
-        getProfile(req, res) {
-            if (!req.isAuthenticated()) {
-                res.status(401).redirect('/unauthorized', constants.notLoggedIn);
-            } else {
-                const username = req.user.image ? req.user.username : 'newuser';
+        getLogin(req, res, errorMessage) {
+            if (req.isAuthenticated()) {
+                usersController(data).getProfile(req, res, 'You are logged in!');
+            }
 
-                const imageUrl = '/static/profileimages/' + username + '.jpg';
+            let result = helper.isAuthenticated(req)
+
+            result.error = helper.getErrorMessage(errorMessage);
+
+            res.render('login', result);
+        },
+        getProfile(req, res, errorMessage) {
+            if (!req.isAuthenticated()) {
+                usersController(data).getLogin(req, res, 'You must log in to see your profile.');
+            } else {
+                let username, imageUrl;
+                if (req.isAuthenticated()) {
+                    username = req.user.image ? req.user.username : 'newuser';
+                    imageUrl = '/static/profileimages/' + username + '.jpg';
+                }
 
                 res.render("profile", {
                     result: {
@@ -42,28 +51,37 @@ module.exports = function (data) {
                         imageUrl: imageUrl,
                         offers: req.user.offers,
                         isAuthenticated: req.isAuthenticated(),
-                    }
+                        user: req.user
+                    },
+                    error: helper.getErrorMessage(errorMessage)
                 });
             }
         },
         getUnauthorized(req, res) {
             res.render("unauthorized", constants.notLoggedIn);
         },
-        getRegister(req, res) {
-            //TODO Fix if person is logged in dont allow him to visit login page
+        getRegister(req, res, errorMessage) {
+            if (req.isAuthenticated()) {
+                usersController(data).getProfile(req, res, 'You are logged in!');
+            }
+
+            let result = constants.notLoggedIn;
+            result.error = helper.getErrorMessage(errorMessage);
             res.render("register", constants.notLoggedIn);
         },
         uploadImage(req, res) {
             upload(req, res, function (err) {
                 if (err) {
                     return res.end(JSON.stringify(err));
+                } else if (!req.file) {
+                    usersController(data).getProfile(req, res, 'You must select an image file!');
+                } else {
+                    data.updateUserImage(req.user.username, req.file.buffer)
+                        .then((user) => {
+                            fs.writeFileSync('./public/profileimages/' + user.username + '.jpg', new Buffer(req.file.buffer));
+                            res.redirect('/profile');
+                        });
                 }
-
-                data.updateUserImage(req.user.username, req.file.buffer)
-                    .then((user) => {
-                        fs.writeFileSync('./public/profileimages/' + user.username + '.jpg', new Buffer(req.file.buffer));
-                        res.redirect('/profile');
-                    });
             });
         },
         createOffer(username, offer) {
@@ -75,19 +93,20 @@ module.exports = function (data) {
         getProfileByUsername(req, res) {
             data.findUserByUsername(req.params.username).
                 then((user) => {
-                    const username = req.user.image ? req.user.username : 'newuser';
-
-                    const imageUrl = '/static/profileimages/' + username + '.jpg';
+                    const imageUrl = '/static/profileimages/' + user.username + '.jpg';
 
                     res.render('profile', {
                         result: {
                             isAuthenticated: req.isAuthenticated(),
                             username: user.username,
                             offers: user.offers,
-                            imageUrl: imageUrl
+                            imageUrl: imageUrl,
+                            user: user
                         }
                     });
                 });
         }
     };
 };
+
+module.exports = usersController;

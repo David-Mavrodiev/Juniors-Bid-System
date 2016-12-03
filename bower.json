@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "socket.io": "^1.7.1",
-    "isotope": "^3.0.1"
+    "isotope": "^3.0.1",
+    "toastr": "^2.1.3"
   }
 }

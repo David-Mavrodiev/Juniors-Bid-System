@@ -4,11 +4,14 @@ const helper = require('../utils/helper');
 const userUtils = require('./users-utils');
 
 module.exports = function (data) {
+    const usersController = require('./users-controller')(data);
     return {
         getAll(req, res) {
-            const username = req.user.image ? req.user.username : 'newuser';
-
-            const imageUrl = '/static/profileimages/' + username + '.jpg';
+            let username, imageUrl;
+            if (req.isAuthenticated()) {
+                username = req.user.image ? req.user.username : 'newuser';
+                imageUrl = '/static/profileimages/' + username + '.jpg';
+            }
 
             data.getAllAuctions()
                 .then(auctions => {
@@ -16,15 +19,18 @@ module.exports = function (data) {
                         result: {
                             auctions: auctions,
                             isAuthenticated: req.isAuthenticated(),
-                            imageUrl: imageUrl
+                            imageUrl: imageUrl,
+                            user: req.user
                         }
                     })
                 })
         },
         searchAll(req, res) {
-            const username = req.user.image ? req.user.username : 'newuser';
-
-            const imageUrl = '/static/profileimages/' + username + '.jpg';
+            let username, imageUrl;
+            if (req.isAuthenticated()) {
+                username = req.user.image ? req.user.username : 'newuser';
+                imageUrl = '/static/profileimages/' + username + '.jpg';
+            }
 
             data.searchAllAuctions(req.params.search)
                 .then(auctions => {
@@ -32,12 +38,12 @@ module.exports = function (data) {
                         result: {
                             auctions: auctions,
                             isAuthenticated: req.isAuthenticated(),
-                            imageUrl: imageUrl
+                            imageUrl: imageUrl,
+                            user: req.user
                         }
                     })
                 })
-        }
-        ,
+        },
         getPage(req, res) {
             data.getAuctionsPage(req.params.page)
                 .then(auctions => {
@@ -50,9 +56,11 @@ module.exports = function (data) {
                 })
         },
         getById(req, res) {
-            const username = req.user.image ? req.user.username : 'newuser';
-
-            const imageUrl = '/static/profileimages/' + username + '.jpg';
+            let username, imageUrl;
+            if (req.isAuthenticated()) {
+                username = req.user.image ? req.user.username : 'newuser';
+                imageUrl = '/static/profileimages/' + username + '.jpg';
+            }
 
             data.getAuctionById(req.params.id)
                 .then(auction => {
@@ -64,27 +72,29 @@ module.exports = function (data) {
                         result: {
                             auction: auction,
                             isAuthenticated: req.isAuthenticated(),
-                            imageUrl: imageUrl
+                            imageUrl: imageUrl,
+                            user: req.user
                         },
                     });
                 })
         },
         getCreate(req, res) {
-            const username = req.user.image ? req.user.username : 'newuser';
-
-            const imageUrl = '/static/profileimages/' + username + '.jpg';
+            let username, imageUrl;
+            if (req.isAuthenticated()) {
+                username = req.user.image ? req.user.username : 'newuser';
+                imageUrl = '/static/profileimages/' + username + '.jpg';
+            }
 
             if (req.isAuthenticated()) {
                 res.render('create-auction', {
                     result: {
                         isAuthenticated: req.isAuthenticated(),
-                        imageUrl: imageUrl
+                        imageUrl: imageUrl,
+                        user: req.user
                     }
                 });
-            }
-            else {
-                res.status(401)
-                    .redirect('/unauthorized');
+            } else {
+                usersController.getRegister(req, res, 'You must log in to publish new auction!');
             }
         },
         create(req, res) {

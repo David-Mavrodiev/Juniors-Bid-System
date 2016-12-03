@@ -25,6 +25,9 @@ let schema = new mongoose.Schema({
             },
             amount: Number
         }]
+    },
+    image: {
+        type: Buffer
     }
 });
 

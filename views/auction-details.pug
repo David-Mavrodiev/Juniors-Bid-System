@@ -11,7 +11,7 @@ block content
                 ul.col-xs-4
                     each bidder in result.auction.bidders
                         li.list-group-item
-                            a(target="_blank", href= '/profile/' + bidder.username)= bidder.username
+                            a(href= '/profile/' + bidder.username)= bidder.username
                             h5(style="display: inline-block; padding-left: 50px;")= 'Offer: ' + bidder.amount
         hr
         if result.isAuthenticated

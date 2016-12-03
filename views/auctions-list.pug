@@ -3,25 +3,25 @@ extends index
 block content
     .container
         .row
-            #filter-panel.collapse.filter-panel
+            #filter-panel.filter-panel
                 .panel.panel-default
                     .panel-body
                         .form-group
-                        label.filter-col(style='margin-right:0;', for='pref-search') Search:
+                            label.filter-col(style='margin-right:0;', for='pref-search') Search:
                             input#pref-search.form-control.input-sm(type='text')
-                            // form group [order by]
-                        button.btn.btn-default.filter-col#button-send-search()
-                            span.glyphicon.glyphicon-record
-                            |  Search
-            button.btn.btn-primary(type='button', data-toggle='collapse', data-target='#filter-panel')
-                span.glyphicon.glyphicon-cog
-                |  Advanced Search
+                            button.btn.btn-default.filter-col#button-send-search()
+                                strong
+                                    span.glyphicon.glyphicon-search
+                                    |  Deep Search
+            //button.btn.btn-primary(type='button', data-toggle='collapse', data-target='#filter-panel')
+            //    span.glyphicon.glyphicon-cog
+            //    |  Advanced Search
         div.row.auctions.grid
             each auction in result.auctions
-                div.auction.element-item
+                div.auction.grid-item
                     h1= 'Title:'
                         a(href='/auctions/'+auction.id)= auction.name
                     h2= 'Item For sale:' + auction.item
                     span= 'Creator: ' + auction.creator
 
-        input.btn.btn-success(type='button' id='load-more' value='Load More')
+        input.btn.btn-success#load-more(type='button' value='Load More')

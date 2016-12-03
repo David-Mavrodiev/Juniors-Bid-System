@@ -7,7 +7,6 @@ body {
     background-repeat: repeat;
 
 }
-
 .pull-right {
     position: relative;
 }
@@ -19,7 +18,7 @@ body {
     background-color: rgba(0, 0, 0, 0.8);
     position: absolute;
     right: 1px;
-    top: 51px;
+    top: 81px;
     text-align: center;
     border: 1px solid whitesmoke;
     border-top: none;
@@ -53,10 +52,28 @@ body {
     padding: 20px 35px;
 }
 
+#logo {
+    display: inline-block;
+    width: 75px;
+    height: auto;
+}
+.navbar-brand{
+    float: none;
+    vertical-align: middle;
+    font-size: 1.2vw;
+}
+.profile-name{
+    vertical-align: middle;
+    font-size: 1.2vw;
+    color: lightgray;
+}
+.pull-right{
+    margin: 3px 0;
+}
 .mini-profile-image {
-    width: 3vw;
-    height: 3vw;
-    border: 1px solid whitesmoke;
+    width: 4vw;
+    height: 4vw;
+    border: 2px solid darkgray;
     border-radius: 50%;
     vertical-align: middle;
     display: inline-block;

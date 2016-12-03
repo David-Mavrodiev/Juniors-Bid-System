@@ -1,7 +1,21 @@
-.search-bar{
+.form-group{
+    text-align: center;
+    margin: 0;
+}
+.form-control{
     display: inline-block;
-    width: 39%;
-    background: black;
+}
+.filter-col{
+}
+#pref-search{
+    width: 50%;
+    color: dodgerblue;
+}
+#button-send-search{
+    width: 20%;
+    margin-left: 20px;
+    background-color: dodgerblue;
+    color: white;
 }
 .auctions{
     width: 60%;
