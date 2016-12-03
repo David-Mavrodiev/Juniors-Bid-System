@@ -19,7 +19,8 @@ function usersController(data) {
             res.render('home', {
                 result: {
                     isAuthenticated: req.isAuthenticated(),
-                    img: imageUrl
+                    img: imageUrl,
+                    user
                 },
                 error: helper.getErrorMessage(errorMessage)
             })
@@ -51,7 +52,8 @@ function usersController(data) {
                         username: user.username,
                         image: user.image,
                         img: imageUrl,
-                        isAuthenticated: req.isAuthenticated()
+                        isAuthenticated: req.isAuthenticated(),
+                        user
                     },
                     error: helper.getErrorMessage(errorMessage)
                 });
