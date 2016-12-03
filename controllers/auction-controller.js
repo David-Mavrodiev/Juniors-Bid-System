@@ -68,12 +68,22 @@ module.exports = function (data) {
                         return res.status(404)
                             .redirect('/error');
                     }
+
+                    let highestBidder, maxAmount = 0;
+                    for (let bidder of auction.bidders) {
+                        if (bidder.amount > maxAmount) {
+                            maxAmount = bidder.amount;
+                            highestBidder = bidder.username;
+                        }
+                    }
+
                     res.render('auction-details', {
                         result: {
                             auction: auction,
                             isAuthenticated: req.isAuthenticated(),
                             imageUrl: imageUrl,
-                            user: req.user
+                            user: req.user,
+                            highestBidder: highestBidder
                         },
                     });
                 })

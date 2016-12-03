@@ -7,12 +7,8 @@ block content
                 h1= 'Title:' + result.auction.name
                 h2= 'Item For sale:' + result.auction.item
                 span= 'Creator: ' + result.auction.creator
-                h2= 'Bidders:'
-                ul.col-xs-4
-                    each bidder in result.auction.bidders
-                        li.list-group-item
-                            a(href= '/profile/' + bidder.username)= bidder.username
-                            h5(style="display: inline-block; padding-left: 50px;")= 'Offer: ' + bidder.amount
+                h2= 'Highest bidder:'
+                a(href= '/profile/' + result.highestBidder)= result.highestBidder
         hr
         if result.isAuthenticated
             .row
