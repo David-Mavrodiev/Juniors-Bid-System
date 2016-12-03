@@ -44,12 +44,26 @@ function usersController(data) {
                     imageUrl = '/static/profileimages/' + username + '.jpg';
                 }
 
+                const offers = req.user.offers.map((offer) => {
+                    return {
+                        auctionId: offer.auctionId,
+                        auctionTitle: offer.auctionTitle,
+                        amount: helper.formatMoney(offer.amount, constants.siteCurrency.big, constants.siteCurrency.small)
+                    };
+                });
+
+                // x => {
+                //     auctionId: x.auctionId,
+                //     auctionTitle: x.auctionTitle,
+                //     amount: helper.formatMoney(x.amount, constants.siteCurrency.big, constants.siteCurrency.small)
+                // }
+
                 res.render("profile", {
                     result: {
                         username: req.user.username,
                         image: req.user.image,
                         imageUrl: imageUrl,
-                        offers: req.user.offers,
+                        offers: offers,
                         isAuthenticated: req.isAuthenticated(),
                         user: req.user
                     },
@@ -94,12 +108,13 @@ function usersController(data) {
             data.findUserByUsername(req.params.username).
                 then((user) => {
                     const imageUrl = '/static/profileimages/' + user.username + '.jpg';
+                    const offers = user.offers.map(x => helper.formatMoney(x.amount, constants.siteCurrency.big, constants.siteCurrency.small));
 
                     res.render('profile', {
                         result: {
                             isAuthenticated: req.isAuthenticated() && user.username === req.user.username,
                             username: user.username,
-                            offers: user.offers,
+                            offers: offers,
                             imageUrl: imageUrl,
                             user: user
                         }

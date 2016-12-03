@@ -15,6 +15,10 @@ const loggedIn = {
         }
     };
 const cryptingKey = 'asd214ag2t52rlla'
+const siteCurrency = {
+    big: 'лв',
+    small: 'стот.'
+};
 
 module.exports = {
     secretWord,
@@ -23,5 +27,6 @@ module.exports = {
     auctionsConnectionString,
     loggedIn: loggedIn,
     notLoggedIn: notLoggedIn,
-    cryptingKey
+    cryptingKey,
+    siteCurrency: siteCurrency
 };

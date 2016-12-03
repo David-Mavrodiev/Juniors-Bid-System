@@ -15,5 +15,5 @@ block content
                 a#offer-button.btn.btn-default Make an offer
                 #offer-container(style="padding-top: 5px;display: none;")
                     form.col-xs-2(method="post", action="/auctions/offer", role='form')
-                        input.form-control(type="text", name="amount", placeholder="Enter offer amount")
+                        input.form-control(type="number", step="0.01", name="amount", min="0", placeholder="Enter offer amount")
                         input(type="submit" class="btn btn-success" value="Submit")

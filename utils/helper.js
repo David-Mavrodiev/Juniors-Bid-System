@@ -36,11 +36,29 @@ function getErrorMessage(errorMessage) {
     };
 }
 
+function formatMoney(money, currencyBig, currencySmall) {
+    let formattedMoney;
+
+    if (money >= 100) {
+        formattedMoney = (money / 100) + ' ' + currencyBig;
+    } else {
+        formattedMoney = money + ' ' + currencySmall;
+    }
+
+    return formattedMoney;
+}
+
+function transformMoney(money) {
+    return money * 100;
+}
+
 module.exports = {
     isAuthenticated(req) {
         return req.isAuthenticated() ? constants.loggedIn : constants.notLoggedIn;
     },
     preventMessageInjectionAttack: preventMessageInjectionAttack,
     preventUserInjectionAttack: preventUserInjectionAttack,
-    getErrorMessage
+    getErrorMessage,
+    formatMoney: formatMoney,
+    transformMoney: transformMoney
 };

@@ -121,22 +121,24 @@ module.exports = function (data) {
             const auctionId = url.substr(url.lastIndexOf('/') + 1);
             data.getAuctionById(auctionId)
                 .then((auction) => {
+                    const amount = helper.transformMoney(req.body.amount);
+
                     if (auction.bidders.map(x => x.username).includes(req.user.username)) {
-                        data.updateBidderOffer(auction._id, req.user.username, req.body.amount)
+                        data.updateBidderOffer(auction._id, req.user.username, amount)
                             .then((editedAuction) => {
-                                userUtils.updateUserOffer(req.user.username, editedAuction._id, req.body.amount);
+                                userUtils.updateUserOffer(req.user.username, editedAuction._id, amount);
                                 res.redirect(url);
                             })
                             .catch((err) => {
                                 console.log(err);
                             });
                     } else {
-                        data.addBidderToAuction(auction._id, req.user.username, req.body.amount)
+                        data.addBidderToAuction(auction._id, req.user.username, amount)
                             .then((editedAuction) => {
                                 userUtils.addUserOffer(req.user.username, {
                                     auctionId: editedAuction._id,
                                     auctionTitle: editedAuction.name,
-                                    amount: req.body.amount
+                                    amount: amount
                                 });
                                 res.redirect(url);
                             })
