@@ -16,6 +16,9 @@ let schema = new mongoose.Schema({
     creator: {
         type: String,
         required: true
+    },
+    image: {
+        type: Buffer
     }
 });
 

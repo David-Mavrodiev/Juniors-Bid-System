@@ -2,7 +2,7 @@ doctype html
 html(lang='en')
   head
     meta(charset='utf-8')
-    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(http-equiv='X-UA-Compatible', ntnt='IE=edge')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     meta(name='description', content='')
     meta(name='author', content='')
@@ -16,6 +16,7 @@ html(lang='en')
     link(href='/static/css/auctions-styles.css', rel='stylesheet')
     link(href='/static/css/index-styles.css', rel='stylesheet')
     link(href='/static/css/chat-styles.css', rel='stylesheet')
+    link(href='../static/bower_components/toastr/toastr.css', rel='stylesheet')
     link(href='http://fonts.googleapis.com/css?family=Open+Sans', rel='stylesheet', type='text/css')
     // HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
     // WARNING: Respond.js doesn't work if you view the page via file://
@@ -78,6 +79,8 @@ html(lang='en')
     script(src='/static/js/jquery.js')
     // Bootstrap Core JavaScript
     script(src='/static/js/bootstrap.min.js')
+    // Toastr
+    script(src='/static/bower_components/toastr/toastr.js')
     // Chat
     // Chat
     if result.isAuthenticated
@@ -92,3 +95,7 @@ html(lang='en')
     script(src='/static/js/auctions-scroll.js')
     script(src='/static/js/search.js')
     script(src='/static/js/main.js')
+    //Error handler
+    if error && error.errorOccured
+        span#errormessage(data-error-message= error.message)
+        script(src='/static/js/error-handler.js')

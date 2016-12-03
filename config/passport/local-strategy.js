@@ -10,6 +10,11 @@ module.exports = function(passport, data) {
         function(username, password, done) {
             data.findUserByUsername(username)
                 .then(user => {
+                    if (!user) {
+                        done(null, false);
+                        return;
+                    }
+
                     const decryptedPassword = encryptor.decrypt(user.password);
 
                     if (user && (decryptedPassword === password)) {

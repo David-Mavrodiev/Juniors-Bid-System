@@ -39,8 +39,8 @@ module.exports = (models) => {
                 })
             });
         },
-        //TODO: Fix server crashing when clicking upload without uploading a picture
         updateUserImage: function(username, image) {
+            console.log('image')
             username = helper.preventUserInjectionAttack(username);
 
             return new Promise((resolve, reject) => {

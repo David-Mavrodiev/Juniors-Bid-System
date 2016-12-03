@@ -2,7 +2,8 @@
 'use strict';
 const helper = require('../utils/helper');
 
-module.exports = function (data) {
+module.exports = function(data) {
+    const usersController = require('./users-controller')(data);
     return {
         getAll(req, res) {
             const user = req.user;
@@ -24,7 +25,7 @@ module.exports = function (data) {
                     })
                 })
         },
-        searchAll(req, res){
+        searchAll(req, res) {
             const user = req.user;
             let isAuthenticated = helper.isAuthenticated(req);
             let imageUrl;
@@ -42,9 +43,8 @@ module.exports = function (data) {
                         }
                     })
                 })
-        }
-        ,
-        getPage(req, res){
+        },
+        getPage(req, res) {
             data.getAuctionsPage(req.params.page)
                 .then(auctions => {
                     res.render('auctions-for-paging', {
@@ -77,7 +77,7 @@ module.exports = function (data) {
                     });
                 })
         },
-        getCreate(req, res){
+        getCreate(req, res) {
             const user = req.user;
             let imageUrl;
 
@@ -92,10 +92,8 @@ module.exports = function (data) {
                         img: imageUrl
                     }
                 });
-            }
-            else {
-                res.status(401)
-                    .redirect('/unauthorized');
+            } else {
+                usersController.getRegister(req, res, 'You must log in to publish new auction!');
             }
         },
         create(req, res) {

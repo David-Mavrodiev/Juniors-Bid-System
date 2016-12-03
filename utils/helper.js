@@ -25,10 +25,22 @@ function preventUserInjectionAttack(input) {
     return result;
 }
 
+function getErrorMessage(errorMessage) {
+    if (typeof errorMessage === 'function') {
+        errorMessage = null;
+    }
+
+    return {
+        message: errorMessage,
+        errorOccured: !!errorMessage
+    };
+}
+
 module.exports = {
     isAuthenticated(req) {
         return req.isAuthenticated() ? constants.loggedIn : constants.notLoggedIn;
     },
     preventMessageInjectionAttack: preventMessageInjectionAttack,
-    preventUserInjectionAttack: preventUserInjectionAttack
+    preventUserInjectionAttack: preventUserInjectionAttack,
+    getErrorMessage
 };
