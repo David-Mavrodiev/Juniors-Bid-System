@@ -11,23 +11,28 @@ $(function() {
         socket.emit('crypt-name', username);
 
         socket.on('crypted-name', function(name) {
-            localStorage.setItem('username', name);
+            localStorage.setItem('token', name);
         });
 
         setSocketRoutes(username);
     } else {
-        let usernameCrypted = localStorage.getItem('username');
+        let usernameCrypted = localStorage.getItem('token');
 
         socket.emit('decrypt-name', usernameCrypted);
 
         socket.on('decrypted-name', function(username) {
-            console.log('decrypted: ' + username + ' crypted: ' + usernameCrypted);
             setSocketRoutes(username);
-        })
+        });
     }
 
     function setSocketRoutes(username) {
         socket.emit('person-connected', username);
+
+        socket.on('wrong-token', function(token) {
+            $.post('/logout', function() {
+
+            });
+        });
 
         socket.on('draw-chat', function(chatData) {
             localUserData = chatData.localUser;

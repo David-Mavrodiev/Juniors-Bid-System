@@ -1,4 +1,3 @@
-const chatController = require('../../controllers/chat-controller');
 const constants = require('../../utils/constants');
 const encryptor = require('simple-encryptor')(constants.cryptingKey);
 
@@ -29,12 +28,6 @@ module.exports = function(server, data) {
 
             };
 
-            socket.broadcast.emit('person-online', { username });
-
-            sockets.push(socket);
-
-            console.log('person-conected');
-
             data.getAllUsers().then(allUsers => {
                 let allUsersData = [];
 
@@ -55,15 +48,15 @@ module.exports = function(server, data) {
                         });
                     }
                 }
-
-                //TODO Handle
                 if (!userNow) {
-                    throw 'User with this name not found';
+                    socket.emit('wrong-token', {});
+                    return;
                 } else {
+                    socket.broadcast.emit('person-online', { username });
+                    sockets.push(socket);
                     onlineUsers.push(userNow);
 
                     socket.on('send-message', function(messageData) {
-                        console.log('send-message');
 
                         data.addMessageToChat(userNow.username, messageData.toUser, userNow.username, messageData.message)
                             .then(message => {
@@ -77,7 +70,6 @@ module.exports = function(server, data) {
                                 }
                                 socket.emit('message-recive', messageToSendToSender);
 
-                                //Checking if second user is online and sending message
                                 for (let i = 0; i < onlineUsers.length; i += 1) {
                                     if (onlineUsers[i].username == messageData.toUser) {
                                         let messageToSendToReciver = {
