@@ -1,5 +1,6 @@
 each auction in result.auctions
     div.auction.grid-item
+        img.auction-image(src="/static/auctionimages/" + auction.id + ".jpg")
         h1= 'Title:'
              a(href='/auctions/' + auction.id)= auction.name
         h2= 'Item For sale:' + auction.item

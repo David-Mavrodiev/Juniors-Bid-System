@@ -1,57 +1,91 @@
-.form-group{
+.form-group {
     text-align: center;
     margin: 0;
 }
-.form-control{
+
+.form-control {
     display: inline-block;
 }
-.filter-col{
-}
-#pref-search{
+
+.filter-col {}
+
+#pref-search {
     width: 50%;
     color: dodgerblue;
 }
-#button-send-search{
+
+#button-send-search {
     width: 20%;
     margin-left: 20px;
     background-color: dodgerblue;
     color: white;
 }
-.auctions{
+
+.auctions {
     width: 60%;
     display: inline-block;
     text-align: right;
-
 }
-.auction{
+
+.auction {
     display: inline-block;
     width: 80%;
     text-align: left;
-
     -webkit-animation-name: fadeIn;
     -webkit-animation-duration: 1s;
     animation-name: fadeIn;
     animation-duration: 1s;
 }
+
+.auction-image {
+    width: 400px;
+    display: block;
+    padding-top: 50px;
+}
+
 @-webkit-keyframes fadeIn {
-    0% { opacity: 0; }
-    20% { opacity: 0; }
-    40% { opacity: 0.3; }
-    60% { opacity: 0.5; }
-    80% { opacity: 0.9; }
-    100% { opacity: 1; }
+    0% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 0;
+    }
+    40% {
+        opacity: 0.3;
+    }
+    60% {
+        opacity: 0.5;
+    }
+    80% {
+        opacity: 0.9;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 @keyframes fadeIn {
-    0% { opacity: 0; }
-    20% { opacity: 0; }
-    40% { opacity: 0.3; }
-    60% { opacity: 0.5; }
-    80% { opacity: 0.9; }
-    100% { opacity: 1; }
+    0% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 0;
+    }
+    40% {
+        opacity: 0.3;
+    }
+    60% {
+        opacity: 0.5;
+    }
+    80% {
+        opacity: 0.9;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
-.filter-col{
-     padding-left:10px;
-     padding-right:10px;
- }
+.filter-col {
+    padding-left: 10px;
+    padding-right: 10px;
+}

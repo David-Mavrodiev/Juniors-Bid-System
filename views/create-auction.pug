@@ -13,11 +13,14 @@ block content
                     .panel-body
                         .row
                             .col-lg-12
-                                form#register-form(action='/auctions', method='POST', role='form', style='display: block;')
+                                form#register-form(enctype="multipart/form-data", action='/auctions', method='POST', role='form', style='display: block;')
                                     .form-group
                                         input#auction-title.form-control(type='text', name='title', tabindex='1', placeholder='Auction Title', value='')
                                     .form-group
                                         input#password.form-control(type='text', name='item', tabindex='2', placeholder='Auction Item')
+                                    .form-group
+                                        label.control-label="Select Auction Image"
+                                        input.btn.btn-default.btn-xs.form-control(type="file", name="auctionPhoto")
                                     .form-group
                                         .row
                                             .col-sm-6.col-sm-offset-3

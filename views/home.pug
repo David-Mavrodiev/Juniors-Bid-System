@@ -7,39 +7,12 @@ block content
         .col-lg-12
           h3 Latest auctions
       .row.text-center
-        .col-md-3.col-sm-6.hero-feature
-          .thumbnail
-            img(src='http://placehold.it/800x500', alt='')
-            .caption
-              h3 Feature Label
-              p Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              p
-                a.btn.btn-primary(href='#') Buy Now!
-                a.btn.btn-default(href='#') More Info
-        .col-md-3.col-sm-6.hero-feature
-          .thumbnail
-            img(src='http://placehold.it/800x500', alt='')
-            .caption
-              h3 Feature Label
-              p Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              p
-                a.btn.btn-primary(href='#') Buy Now!
-                a.btn.btn-default(href='#') More Info
-        .col-md-3.col-sm-6.hero-feature
-          .thumbnail
-            img(src='http://placehold.it/800x500', alt='')
-            .caption
-              h3 Feature Label
-              p Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              p
-                a.btn.btn-primary(href='#') Buy Now!
-                a.btn.btn-default(href='#') More Info
-        .col-md-3.col-sm-6.hero-feature
-          .thumbnail
-            img(src='http://placehold.it/800x500', alt='')
-            .caption
-              h3 Feature Label
-              p Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              p
-                a.btn.btn-primary(href='#') Buy Now!
-                a.btn.btn-default(href='#') More Info
+        each auction in result.auctions
+          .col-md-3.col-sm-6.hero-feature
+            .thumbnail
+              img.top-five-auction-image(src='/static/auctionimages/' + auction.id + '.jpg', alt='')
+              .caption
+                h3= auction.name
+                p= auction.item
+                p
+                  a.btn.btn-primary(href='/auctions/' + auction.id) Bid Now!

@@ -14,14 +14,20 @@ function usersController(data) {
                 imageUrl = '/static/profileimages/' + username + '.jpg';
             }
 
-            res.render('home', {
-                result: {
-                    isAuthenticated: req.isAuthenticated(),
-                    imageUrl: imageUrl,
-                    user: req.user
-                },
-                error: helper.getErrorMessage(errorMessage)
-            })
+            data.getNewestAuctions(5)
+                .then(auctions => {
+                    let renderObject = {
+                        result: {
+                            isAuthenticated: req.isAuthenticated(),
+                            imageUrl: imageUrl,
+                            user: req.user,
+                            auctions: auctions
+                        },
+                        error: helper.getErrorMessage(errorMessage)
+                    }
+
+                    res.render('home', renderObject);
+                });
         },
         getLogin(req, res, errorMessage) {
             if (req.isAuthenticated()) {
@@ -101,28 +107,28 @@ function usersController(data) {
         },
         getProfileByUsername(req, res) {
             data.findUserByUsername(req.params.username).
-                then((user) => {
-                    const imageUrl = '/static/profileimages/' + user.username + '.jpg';
+            then((user) => {
+                const imageUrl = '/static/profileimages/' + user.username + '.jpg';
 
-                    const offers = req.user.offers.map((offer) => {
-                        return {
-                            auctionId: offer.auctionId,
-                            auctionTitle: offer.auctionTitle,
-                            amount: helper.formatMoney(offer.amount, constants.siteCurrency.big, constants.siteCurrency.small)
-                        };
-                    });
-
-                    res.render('profile', {
-                        result: {
-                            isAuthenticated: req.isAuthenticated(),
-                            isAuthenticatedCurrent: req.isAuthenticated() && user.username === req.user.username,
-                            username: user.username,
-                            offers: offers,
-                            imageUrl: imageUrl,
-                            user: req.user
-                        }
-                    });
+                const offers = req.user.offers.map((offer) => {
+                    return {
+                        auctionId: offer.auctionId,
+                        auctionTitle: offer.auctionTitle,
+                        amount: helper.formatMoney(offer.amount, constants.siteCurrency.big, constants.siteCurrency.small)
+                    };
                 });
+
+                res.render('profile', {
+                    result: {
+                        isAuthenticated: req.isAuthenticated(),
+                        isAuthenticatedCurrent: req.isAuthenticated() && user.username === req.user.username,
+                        username: user.username,
+                        offers: offers,
+                        imageUrl: imageUrl,
+                        user: req.user
+                    }
+                });
+            });
         }
     };
 };

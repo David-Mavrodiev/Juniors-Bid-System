@@ -4,11 +4,15 @@ block content
     .container
         .row
             div.auction
+                img.auction-image(src="/static/auctionimages/" + result.auction.id + ".jpg")
                 h1= 'Title:' + result.auction.name
                 h2= 'Item For sale:' + result.auction.item
                 span= 'Creator: ' + result.auction.creator
-                h2= 'Highest bidder:'
-                a(href= '/profile/' + result.highestBidder)= result.highestBidder
+                if result.highestBidder
+                    h2= 'Highest bidder:'
+                    a(href= '/profile/' + result.highestBidder)= result.highestBidder
+                else
+                    h2= 'No bids yet'
         hr
         if result.isAuthenticated
             .row

@@ -1,9 +1,13 @@
 /*globals module require*/
 'use strict';
 const helper = require('../utils/helper');
+const constants = require('../utils/constants');
 const userUtils = require('./users-utils');
+const multer = require('multer');
+const upload = multer().single('auctionPhoto');
+const fs = require('fs');
 
-module.exports = function (data) {
+function auctionController(data) {
     const usersController = require('./users-controller')(data);
     return {
         getAll(req, res) {
@@ -88,33 +92,44 @@ module.exports = function (data) {
                     });
                 })
         },
-        getCreate(req, res) {
+        getCreate(req, res, errorMessage) {
             let username, imageUrl;
+
             if (req.isAuthenticated()) {
                 username = req.user.image ? req.user.username : 'newuser';
                 imageUrl = '/static/profileimages/' + username + '.jpg';
-            }
 
-            if (req.isAuthenticated()) {
                 res.render('create-auction', {
                     result: {
                         isAuthenticated: req.isAuthenticated(),
                         imageUrl: imageUrl,
                         user: req.user
-                    }
+                    },
+                    error: helper.getErrorMessage(errorMessage)
                 });
             } else {
-                usersController.getRegister(req, res, 'You must log in to publish new auction!');
+                usersController.getLogin(req, res, 'You must log in to publish new auction!');
             }
         },
         create(req, res) {
             let body = req.body;
             const user = req.user;
 
-            data.createAuction(body.title, body.item, user.username)
-                .then(() => {
-                    res.redirect('/auctions');
-                });
+            upload(req, res, function(err) {
+                if (err) {
+                    return res.end(JSON.stringify(err));
+                } else if (!req.file) {
+                    auctionController(data).getCreate(req, res, 'You must select an image file!');
+                } else {
+                    data.createAuction(req.body.title, req.body.item, req.user.username)
+                        .then((auction) => {
+                            console.log('creating auction 2');
+                            fs.writeFileSync('./public/auctionimages/' + auction._id + '.jpg', new Buffer(req.file.buffer));
+                            console.log('Writed');
+                            res.redirect('/auctions');
+                        });
+                }
+            });
         },
         handleOffer(req, res) {
             const url = req.get('referer');
@@ -150,3 +165,5 @@ module.exports = function (data) {
         }
     }
 };
+
+module.exports = auctionController;
