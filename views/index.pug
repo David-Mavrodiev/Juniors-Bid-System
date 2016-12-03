@@ -34,7 +34,8 @@ html(lang='en')
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.navbar-brand(href='/home') BID SYSTEM
+          img.navbar-brand#logo(src='/static/img/logo.png')
+          a.navbar-brand(href='/home') Home
           a.navbar-brand(href='/auctions') All Auctions
           if result.isAuthenticated
             a.navbar-brand(href='/auctions/create') Create Auction
@@ -47,13 +48,14 @@ html(lang='en')
                             if result.isAuthenticated
                                 div.open-info
                                     div.open-info-greeting
-                                        p Hello, Fiki!
+                                        p='Hello, '+ result.user.username
                                         hr
                                     span.info-usernamea
                                         a(href='/profile', style="display: inline-block;") Profile
                                     br
                                     span.info-logouta
                                         a#logout-button(href='/logout', style="display: inline-block;") Log out
+                                span.profile-name= result.user.username
                                 img.mini-profile-image(src=result.img)
                             else
                                 a#login-button(href='/login') Log in / Sign up
@@ -90,8 +92,6 @@ html(lang='en')
     // Logout
     script(src='/static/js/logout.js')
     script(src='/static/bower_components/jquery/dist/jquery.js')
-    script(src='/static/bower_components/isotope/dist/isotope.pkgd.js')
-    //script(src='/static/js/infinite-scroll.js')
     script(src='/static/js/auctions-scroll.js')
     script(src='/static/js/search.js')
     script(src='/static/js/main.js')

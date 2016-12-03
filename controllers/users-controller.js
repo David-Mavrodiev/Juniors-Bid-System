@@ -51,7 +51,7 @@ function usersController(data) {
                         username: user.username,
                         image: user.image,
                         img: imageUrl,
-                        isAuthenticated: req.isAuthenticated(),
+                        isAuthenticated: req.isAuthenticated()
                     },
                     error: helper.getErrorMessage(errorMessage)
                 });
