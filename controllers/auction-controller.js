@@ -2,7 +2,6 @@
 'use strict';
 const helper = require('../utils/helper');
 const constants = require('../utils/constants');
-const userUtils = require('./users-utils');
 const multer = require('multer');
 const upload = multer().single('auctionPhoto');
 const fs = require('fs');
@@ -141,7 +140,7 @@ function auctionController(data) {
                     if (auction.bidders.map(x => x.username).includes(req.user.username)) {
                         data.updateBidderOffer(auction._id, req.user.username, amount)
                             .then((editedAuction) => {
-                                userUtils.updateUserOffer(req.user.username, editedAuction._id, amount);
+                                data.updateUserOffer(req.user.username, editedAuction._id, amount);
                                 res.redirect(url);
                             })
                             .catch((err) => {
@@ -150,7 +149,7 @@ function auctionController(data) {
                     } else {
                         data.addBidderToAuction(auction._id, req.user.username, amount)
                             .then((editedAuction) => {
-                                userUtils.addUserOffer(req.user.username, {
+                                data.addOffer(req.user.username, {
                                     auctionId: editedAuction._id,
                                     auctionTitle: editedAuction.name,
                                     amount: amount
