@@ -97,7 +97,7 @@ function usersController(data) {
 
                     res.render('profile', {
                         result: {
-                            isAuthenticated: req.isAuthenticated(),
+                            isAuthenticated: req.isAuthenticated() && user.username === req.user.username,
                             username: user.username,
                             offers: user.offers,
                             imageUrl: imageUrl,
