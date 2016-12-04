@@ -10,7 +10,7 @@ const moment = require('moment');
 function auctionController(data) {
     const usersController = require('./users-controller')(data);
     return {
-        getAll(req, res) {
+        getAll(req, res, errorMessage) {
             let username, imageUrl;
             if (req.isAuthenticated()) {
                 username = req.user.image ? req.user.username : 'newuser';
@@ -26,7 +26,8 @@ function auctionController(data) {
                                 isAuthenticated: req.isAuthenticated(),
                                 imageUrl: imageUrl,
                                 user: req.user
-                            }
+                            },
+                            error: helper.getErrorMessage(errorMessage)
                         })
                     })
 
@@ -39,7 +40,8 @@ function auctionController(data) {
                                 isAuthenticated: req.isAuthenticated(),
                                 imageUrl: imageUrl,
                                 user: req.user
-                            }
+                            },
+                            error: helper.getErrorMessage(errorMessage)
                         })
                     })
             }
@@ -97,7 +99,6 @@ function auctionController(data) {
                             highestBidderUser = bidder;
                         }
                     }
-                    console.log(highestBidderUser);
                     if (req.isAuthenticated() && req.user.IsAdmin) {
                         res.render('admins-auction', {
                             result: {
@@ -144,24 +145,35 @@ function auctionController(data) {
             let body = req.body;
             const user = req.user;
 
-            upload(req, res, function (err) {
+            upload(req, res, function(err) {
+                let hours = +req.body.end;
+                let minPrice = +req.body.minPrice;
                 if (err) {
                     return res.end(JSON.stringify(err));
                 } else if (!req.file) {
                     auctionController(data).getCreate(req, res, 'You must select an image file!');
+                } else if (!req.body.title || req.body.title.length < 3 || req.body.title.length > 25) {
+                    auctionController(data).getCreate(req, res, 'Title must be between 3 and 25 characters!');
+                } else if (!req.body.item || req.body.item.length < 3 || req.body.item.length > 25) {
+                    auctionController(data).getCreate(req, res, 'Item must be between 3 and 25 characters!');
+                } else if (typeof hours !== 'number' || isNaN(hours)) {
+                    auctionController(data).getCreate(req, res, 'Invalid auction duration');
+                } else if (hours < 1 || hours > 24) {
+                    auctionController(data).getCreate(req, res, 'Auction Duration must be between 1 and 24 hours');
+                } else if (typeof minPrice !== 'number' || isNaN(minPrice)) {
+                    auctionController(data).getCreate(req, res, 'Invalid minimum price');
+                } else if (minPrice < 1 || minPrice > 10000) {
+                    auctionController(data).getCreate(req, res, 'Minimum price must be between 1 and 10000.');
                 } else {
-
                     let dateCreated = moment();
                     let dateEnd = moment(dateCreated);
 
-                    dateEnd.add(+req.body.end, 'hours');
+                    dateEnd.add(hours, 'hours');
 
 
                     data.createAuction(req.body.title, req.body.item, req.user.username, dateCreated, dateEnd, req.body.minPrice)
                         .then((auction) => {
-                            console.log('creating auction 2');
                             fs.writeFileSync('./public/auctionimages/' + auction._id + '.jpg', new Buffer(req.file.buffer));
-                            console.log('Writed');
                             res.redirect('/auctions');
                         });
                 }
@@ -198,27 +210,30 @@ function auctionController(data) {
                                 });
                         }
                     } else {
-                        res.redirect("/auctions");
+                        auctionController(data).getAll(req, res, 'Invalid Bet: Minimum bet must be: ' + helper.transformMoney(auction.minPrice));
                     }
                 });
         },
-        createComment(req, res){
+        createComment(req, res) {
             let body = req.body;
             let id = req.params.id;
-            let text = body.text;
+            let text = helper.preventMessageInjectionAttack(body.text);
             let user = req.user.username;
-
+            if (!text || text.length < 3 || text.length > 100) {
+                auctionController(data).getAll(req, res, 'Message text must be between 3 and 100 characters');
+            }
             data.addCommentToAuction(id, text, user)
                 .then(auction => {
                     if (auction) {
                         res.status(204);
-                        res.send(user);
+                        res.send({});
+                        //res.redirect(req.url)
                     } else {
                         res.status(404);
                     }
                 })
                 .catch((err) => {
-                    console.log(err);
+                    auctionController(data).getAll(req, res, 'Message text must be between 3 and 100 characters');
                 })
         }
     }

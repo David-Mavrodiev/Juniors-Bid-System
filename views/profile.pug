@@ -3,7 +3,7 @@ extends index
 block content
   .container
     .fb-profile
-      img.fb-image-lg(align='left', src='http://lorempixel.com/850/280/nightlife/5/', alt='Profile image example')
+      img.fb-image-lg(align='left', src='/static/img/profilebackground.jpg', alt='Profile image example')
       img.fb-image-profile.thumbnail(align='left', src= result.imageUrl, alt='Profile image')
       if result.isAuthenticatedCurrent
         form#image-upload(enctype="multipart/form-data", method="post", action="/image")

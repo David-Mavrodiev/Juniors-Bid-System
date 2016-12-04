@@ -68,6 +68,9 @@ function authController(data) {
                 .then((user) => {
                     if (user) {
                         usersController.getRegister(req, res, 'User with this username already exists!');
+                    }
+                    if (req.body.username.length < 3 || req.body.username.length > 12) {
+                        usersController.getRegister(req, res, 'Username must be between 3 and 12 characters!');
                     } else {
                         const encryptedPassword = encryptor.encrypt(req.body.password);
 
