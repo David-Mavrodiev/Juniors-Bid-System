@@ -1,7 +1,14 @@
 each auction in result.auctions
     div.auction.grid-item
-        img.auction-image(src="/static/auctionimages/" + auction.id + ".jpg")
-        h1= 'Title:'
-             a(href='/auctions/' + auction.id)= auction.name
-        h2= 'Item For sale:' + auction.item
-        span= 'Creator: ' + auction.creator
+        div.auction-image
+            img.auction-image(src="/static/auctionimages/" + auction.id + ".jpg")
+        div.auction-info
+            h1.auction-title= ''
+            a.auction-name(href='/auctions/' + auction.id)= auction.name
+            h2.auction-item= 'Item: ' + auction.item
+            h3.auction-creator= 'Seller: '
+            a.auction-creator-name(href= '/profile/' + auction.creator)= auction.creator
+        div.bid-and-time
+            strong
+                a.bid(href='/auctions/' + auction.id)= 'Bid'
+            span.time= 'Ends In: ' + auction.endDate

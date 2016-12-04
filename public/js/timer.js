@@ -1,4 +1,0 @@
-/*globals moment*/
-'use strict';
-
-

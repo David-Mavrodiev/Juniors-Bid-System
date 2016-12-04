@@ -156,8 +156,6 @@ function auctionController(data) {
 
                     dateEnd.add(+req.body.end, 'hours');
 
-                    dateCreated = dateCreated.format('LT');
-                    dateEnd = dateEnd.format('LT');
 
                     data.createAuction(req.body.title, req.body.item, req.user.username, dateCreated, dateEnd)
                         .then((auction) => {

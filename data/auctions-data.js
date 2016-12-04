@@ -8,7 +8,7 @@ module.exports = function(models) {
     return {
         getAllAuctions: function() {
             return new Promise((resolve, reject) => {
-                Auction.paginate({}, { page: 1, limit: 10 }, (err, auctions) => {
+                Auction.paginate({}, { page: 1, limit: 50 }, (err, auctions) => {
                     if (err) {
                         return reject(err)
                     }

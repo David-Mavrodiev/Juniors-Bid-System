@@ -18,11 +18,11 @@ let schema = new mongoose.Schema({
         required: true
     },
     dateCreated: {
-        type: String,
+        type: Date,
         required: true
     },
     endDate: {
-        type: String,
+        type: Date,
         required: true
     },
     bidders: {
