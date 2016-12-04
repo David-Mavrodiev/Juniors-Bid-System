@@ -5,20 +5,21 @@ block content
         .row
             div.auction
                 img.auction-image(src="/static/auctionimages/" + result.auction.id + ".jpg")
-                h1= 'Title:' + result.auction.name
-                h2= 'Item For sale:' + result.auction.item
-                h2= 'Creator: ' + result.auction.creator
-                h2= 'Min price: ' + result.auction.minPrice
+                h2= 'Title: ' + result.auction.name
+                h4= 'Item For sale: ' + result.auction.item
+                h4= 'Creator: ' + result.auction.creator
+                h4= 'Min price: ' + result.auction.minPrice
                 if result.highestBidder
-                    h2= 'Highest bidder:'
-                    a(href= '/profile/' + result.highestBidder)= result.highestBidder
+                    h4= 'Highest bidder: ' 
+                        a(href= '/profile/' + result.highestBidder)= result.highestBidder
                 else
-                    h2= 'No bids yet'
+                    h4= 'No bids yet'
                 div.comments
                     each comment in result.auction.comments
                             div.comment
-                                p.comment-value=comment.comment
-                                p.comment-user=comment.user
+                                p.comment-value
+                                    a(href='/profile/'+comment.user)= comment.user
+                                    span=': '+comment.comment
                 if result.isAuthenticated
                     div.comments-form
                         input#comment-text(type='text', placeholder='What do you think?')

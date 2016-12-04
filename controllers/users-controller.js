@@ -106,11 +106,13 @@ function usersController(data) {
             data.updateUserOffer(username, auctionId, newAmount);
         },
         getProfileByUsername(req, res) {
-            data.findUserByUsername(req.params.username).
+            let urlParted = req.url.split('/');
+            let name = urlParted[urlParted.length - 1];
+            data.findUserByUsername(name).
             then((user) => {
                 const imageUrl = '/static/profileimages/' + user.username + '.jpg';
 
-                const offers = req.user.offers.map((offer) => {
+                const offers = user.offers.map((offer) => {
                     return {
                         auctionId: offer.auctionId,
                         auctionTitle: offer.auctionTitle,

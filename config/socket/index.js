@@ -10,7 +10,6 @@ module.exports = function(server, data) {
         let userNow = null;
 
         socket.on('crypt-name', function(name) {
-            console.log('crypt-name');
             let cryptedName = encryptor.encrypt(name);
 
             socket.emit('crypted-name', cryptedName);
@@ -18,7 +17,6 @@ module.exports = function(server, data) {
 
         socket.on('decrypt-name', function(cryptedName) {
             let decryptedName = encryptor.decrypt(cryptedName);
-            console.log('decrypt-name');
 
             socket.emit('decrypted-name', decryptedName);
         })
@@ -53,7 +51,7 @@ module.exports = function(server, data) {
                     return;
                 } else {
                     socket.broadcast.emit('person-online', { username });
-                    sockets.push(socket);
+                    sockets[socket.id] = socket;
                     onlineUsers.push(userNow);
 
                     socket.on('send-message', function(messageData) {
@@ -79,9 +77,7 @@ module.exports = function(server, data) {
                                             online: true
                                         }
 
-                                        console.log('second user is online')
                                         sockets[i].emit('message-recive', messageToSendToReciver);
-
                                         break;
                                     }
                                 }
@@ -128,8 +124,13 @@ module.exports = function(server, data) {
 
         socket.on('disconnect', function(data) {
             if (userNow) {
-                onlineUsers.splice(onlineUsers.indexOf(userNow), 1);
-                sockets.splice(sockets.indexOf(socket), 1);
+                for (let i = 0; i < onlineUsers.length; i += 1) {
+                    if (userNow.username == onlineUsers[i].username) {
+                        onlineUsers.splice(i, 1);
+                    }
+                }
+
+                delete sockets[socket.id];
                 console.log('Disconected: ' + onlineUsers.length + ' users connected');
             }
         });
