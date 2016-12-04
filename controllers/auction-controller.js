@@ -157,7 +157,7 @@ function auctionController(data) {
                     dateEnd.add(+req.body.end, 'hours');
 
 
-                    data.createAuction(req.body.title, req.body.item, req.user.username, dateCreated, dateEnd)
+                    data.createAuction(req.body.title, req.body.item, req.user.username, dateCreated, dateEnd, req.body.minPrice)
                         .then((auction) => {
                             console.log('creating auction 2');
                             fs.writeFileSync('./public/auctionimages/' + auction._id + '.jpg', new Buffer(req.file.buffer));
@@ -173,29 +173,32 @@ function auctionController(data) {
             data.getAuctionById(auctionId)
                 .then((auction) => {
                     const amount = helper.transformMoney(req.body.amount);
-
-                    if (auction.bidders.map(x => x.username).includes(req.user.username)) {
-                        data.updateBidderOffer(auction._id, req.user.username, amount)
-                            .then((editedAuction) => {
-                                data.updateUserOffer(req.user.username, editedAuction._id, amount);
-                                res.redirect(url);
-                            })
-                            .catch((err) => {
-                                console.log(err);
-                            });
-                    } else {
-                        data.addBidderToAuction(auction._id, req.user.username, amount)
-                            .then((editedAuction) => {
-                                data.addOffer(req.user.username, {
-                                    auctionId: editedAuction._id,
-                                    auctionTitle: editedAuction.name,
-                                    amount: amount
+                    if (amount > helper.transformMoney(auction.minPrice)) {
+                        if (auction.bidders.map(x => x.username).includes(req.user.username)) {
+                            data.updateBidderOffer(auction._id, req.user.username, amount)
+                                .then((editedAuction) => {
+                                    data.updateUserOffer(req.user.username, editedAuction._id, amount);
+                                    res.redirect(url);
+                                })
+                                .catch((err) => {
+                                    console.log(err);
                                 });
-                                res.redirect(url);
-                            })
-                            .catch((err) => {
-                                console.log(err);
-                            });
+                        } else {
+                            data.addBidderToAuction(auction._id, req.user.username, amount)
+                                .then((editedAuction) => {
+                                    data.addOffer(req.user.username, {
+                                        auctionId: editedAuction._id,
+                                        auctionTitle: editedAuction.name,
+                                        amount: amount
+                                    });
+                                    res.redirect(url);
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                });
+                        }
+                    } else {
+                        res.redirect("/auctions");
                     }
                 });
         }
