@@ -9,6 +9,8 @@ module.exports = function(server, data) {
     io.on('connection', function(socket) {
         let userNow = null;
 
+        let socketId = null;
+
         socket.on('crypt-name', function(name) {
             let cryptedName = encryptor.encrypt(name);
 
@@ -51,7 +53,8 @@ module.exports = function(server, data) {
                     return;
                 } else {
                     socket.broadcast.emit('person-online', { username });
-                    sockets[socket.id] = socket;
+                    sockets.push(socket);
+                    socketId = sockets.length - 1;
                     onlineUsers.push(userNow);
 
                     socket.on('send-message', function(messageData) {
@@ -130,7 +133,7 @@ module.exports = function(server, data) {
                     }
                 }
 
-                delete sockets[socket.id];
+                sockets.splice(socketId, 1);
                 console.log('Disconected: ' + onlineUsers.length + ' users connected');
             }
         });
