@@ -29,6 +29,45 @@ function usersController(data) {
                     res.render('home', renderObject);
                 });
         },
+        createAdmin(req, res) {
+            let username = req.body.username;
+            console.log(username)
+            data.findUserByUsername(username).then(user => {
+                console.log(user);
+                user.IsAdmin = true;
+                user.save()
+                res.send("ok");
+            });
+        },
+        getCreateAdmin(req, res) {
+            let username, imageUrl;
+            if (req.isAuthenticated()) {
+                username = req.user.image ? req.user.username : 'newuser';
+                imageUrl = '/static/profileimages/' + username + '.jpg';
+            }
+
+            //console.log("Is Admin : " + req.isAuthenticated() + " " + req.user.IsAdmin)
+            if (req.isAuthenticated() && req.user.IsAdmin) {
+                data.getAllUsers()
+                    .then(users => {
+                        let notAdmins = [];
+                        for (let i = 0; i < users.length; i++) {
+                            if (!users[i].IsAdmin) {
+                                console.log(users[i].username);
+                                notAdmins.push(users[i]);
+                            }
+                        }
+                        res.render('admins-create', {
+                            result: {
+                                isAuthenticated: req.isAuthenticated(),
+                                imageUrl: imageUrl,
+                                user: req.user,
+                                users: notAdmins
+                            }
+                        });
+                    });
+            }
+        },
         getLogin(req, res, errorMessage) {
             if (req.isAuthenticated()) {
                 usersController(data).getProfile(req, res, 'You are logged in!');

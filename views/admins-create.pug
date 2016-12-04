@@ -1,0 +1,16 @@
+extends index
+
+block content
+    .container
+        .row
+           div.row.auctions.grid
+            each user in result.users
+                div.auction.grid-item
+                    div.auction-image
+                        img.auction-image(src='/static/profileimages/' + user.username + '.jpg')
+                    div.auction-info
+                        h1= ''
+                             a#username(href= '/profile/'+ user.username)= user.username
+                        a.btn.btn-success= 'Make ' + user.username  + ' admin'
+    script(src="/static/js/jquery.js")
+    script(src="/static/js/create-admin.js")

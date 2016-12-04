@@ -11,6 +11,8 @@ module.exports = (app, data) => {
     router
         .get('/', usersController.getHome)
         .get('/home', usersController.getHome)
+        .get('/createAdmin', usersController.getCreateAdmin)
+        .post('/createAdmin', usersController.createAdmin)
         .get('/login', usersController.getLogin)
         .post('/login', authController.loginLocal)
         .get('/register', usersController.getRegister)

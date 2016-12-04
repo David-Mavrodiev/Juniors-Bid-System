@@ -42,6 +42,8 @@ html(lang='en')
           if result.isAuthenticated
             a.navbar-brand(href='/auctions/create') Create Auction
             a.navbar-brand(href='/auctions/myAuctions') My Auctions
+          if result.isAuthenticated && result.user.IsAdmin
+            a.navbar-brand(href='/createAdmin') Make Admins
         // Collect the nav links, forms, and other content for toggling
         #bs-example-navbar-collapse-1.collapse.navbar-collapse
             .row
