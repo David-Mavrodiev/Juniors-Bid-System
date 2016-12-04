@@ -17,11 +17,11 @@ let schema = new mongoose.Schema({
         type: String,
         required: true
     },
-    dateCreated:{
+    dateCreated: {
         type: String,
-        required:true
+        required: true
     },
-    endDate:{
+    endDate: {
         type: String,
         required: true
     },

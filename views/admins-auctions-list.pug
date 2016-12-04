@@ -1,0 +1,25 @@
+extends index
+
+block content
+    .container
+        .row
+          h2.text-center Auctions
+          hr
+          table.table.table-striped
+           thead
+             tr
+              th(style="color: brown") Show
+              th(style="color: brown") Name
+              th(style="color: brown") Item
+              th(style="color: brown") Creator
+              th(style="color: brown") Bidders count
+           tbody
+             each auction in result.auctions
+              tr
+               td
+                a(href="auctions/" + auction._id) Show
+               td= auction.name
+               td= auction.item
+               td= auction.creator
+               td= auction.bidders.length
+               

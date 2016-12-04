@@ -21,6 +21,10 @@ let userSchema = new mongoose.Schema({
             auctionTitle: String,
             amount: Number
         }]
+    },
+    IsAdmin: {
+        type: Boolean,
+        default: false
     }
 });
 

@@ -16,18 +16,33 @@ function auctionController(data) {
                 username = req.user.image ? req.user.username : 'newuser';
                 imageUrl = '/static/profileimages/' + username + '.jpg';
             }
-
-            data.getAllAuctions()
-                .then(auctions => {
-                    res.render('auctions-list', {
-                        result: {
-                            auctions: auctions,
-                            isAuthenticated: req.isAuthenticated(),
-                            imageUrl: imageUrl,
-                            user: req.user
-                        }
+            if (req.isAuthenticated() && req.user.IsAdmin) {
+                data.getAllAuctions()
+                    .then(auctions => {
+                        //console.log(auctions)
+                        res.render('admins-auctions-list', {
+                            result: {
+                                auctions: auctions,
+                                isAuthenticated: req.isAuthenticated(),
+                                imageUrl: imageUrl,
+                                user: req.user
+                            }
+                        })
                     })
-                })
+
+            } else {
+                data.getAllAuctions()
+                    .then(auctions => {
+                        res.render('auctions-list', {
+                            result: {
+                                auctions: auctions,
+                                isAuthenticated: req.isAuthenticated(),
+                                imageUrl: imageUrl,
+                                user: req.user
+                            }
+                        })
+                    })
+            }
         },
         searchAll(req, res) {
             let username, imageUrl;
@@ -73,23 +88,37 @@ function auctionController(data) {
                             .redirect('/error');
                     }
 
-                    let highestBidder, maxAmount = 0;
+                    let highestBidder, maxAmount = 0,
+                        highestBidderUser = null;
                     for (let bidder of auction.bidders) {
                         if (bidder.amount > maxAmount) {
                             maxAmount = bidder.amount;
                             highestBidder = bidder.username;
+                            highestBidderUser = bidder;
                         }
                     }
-
-                    res.render('auction-details', {
-                        result: {
-                            auction: auction,
-                            isAuthenticated: req.isAuthenticated(),
-                            imageUrl: imageUrl,
-                            user: req.user,
-                            highestBidder: highestBidder
-                        },
-                    });
+                    console.log(highestBidderUser);
+                    if (req.isAuthenticated() && req.user.IsAdmin) {
+                        res.render('admins-auction', {
+                            result: {
+                                auction: auction,
+                                highestBidder: highestBidderUser,
+                                isAuthenticated: req.isAuthenticated(),
+                                user: req.user,
+                                imageUrl: imageUrl
+                            },
+                        });
+                    } else {
+                        res.render('auction-details', {
+                            result: {
+                                auction: auction,
+                                isAuthenticated: req.isAuthenticated(),
+                                imageUrl: imageUrl,
+                                user: req.user,
+                                highestBidder: highestBidder
+                            }
+                        });
+                    }
                 })
         },
         getCreate(req, res, errorMessage) {
@@ -115,7 +144,7 @@ function auctionController(data) {
             let body = req.body;
             const user = req.user;
 
-            upload(req, res, function (err) {
+            upload(req, res, function(err) {
                 if (err) {
                     return res.end(JSON.stringify(err));
                 } else if (!req.file) {

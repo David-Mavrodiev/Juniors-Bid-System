@@ -1,0 +1,31 @@
+extends index
+
+block content
+    .container
+          .row
+            h2.text-center= result.auction.name
+            hr 
+            hr
+            h4= "Name: " + result.auction.name
+            hr
+            h4= "Item: " + result.auction.item
+            hr
+            h4= "Creator: " + result.auction.creator
+            hr
+            if result.highestBidder
+              h4= "Highest bidder"
+              ul
+               li= "Name: " + result.highestBidder.username
+               li= "Amount: " + result.highestBidder.amount
+            hr
+            h4.text-center= "Bidders"
+            table.table.table-striped
+                thead
+                    tr
+                     th(style="color: brown") Username
+                     th(style="color: brown") Amount
+                tbody
+                    each bidder in result.auction.bidders
+                     tr
+                      td= bidder.username
+                      td= bidder.amount
