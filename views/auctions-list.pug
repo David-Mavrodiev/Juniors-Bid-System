@@ -30,6 +30,5 @@ block content
                     div.bid-and-time
                         strong
                             a.bid(href='/auctions/'+auction.id)= 'Bid'
-                        span.time
-                            time(datetime='08:00')
+                        span.time=auction.endDate
         input.btn.btn-success#load-more(type='button' value='Load More')
