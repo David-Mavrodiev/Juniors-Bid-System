@@ -39,6 +39,10 @@ let schema = new mongoose.Schema({
     },
     image: {
         type: Buffer
+    },
+    minPrice: {
+        type: Number,
+        default: 0
     }
 });
 
