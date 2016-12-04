@@ -44,6 +44,24 @@ function auctionController(data) {
                     })
             }
         },
+        getAuctionsGallery(req, res) {
+            let username, imageUrl;
+            if (req.isAuthenticated()) {
+                username = req.user.image ? req.user.username : 'newuser';
+                imageUrl = '/static/profileimages/' + username + '.jpg';
+            }
+            data.getAllAuctions()
+                .then(auctions => {
+                    res.render("gallery", {
+                        result: {
+                            auctions: auctions,
+                            isAuthenticated: req.isAuthenticated(),
+                            imageUrl: imageUrl,
+                            user: req.user
+                        }
+                    });
+                });
+        },
         getMyAuctions(req, res) {
             let username, imageUrl;
             if (req.isAuthenticated()) {
@@ -62,7 +80,7 @@ function auctionController(data) {
                         res.render("my-auctions", {
                             result: {
                                 auctions: myAuctions,
-                                isAuthenticated: req.isAuthenticated,
+                                isAuthenticated: req.isAuthenticated(),
                                 imageUrl: imageUrl,
                                 user: req.user
                             }

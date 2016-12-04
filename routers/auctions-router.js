@@ -10,6 +10,7 @@ module.exports = function(app, data) {
     let router = express.Router();
     router.get('/', controller.getAll);
     router.get('/myAuctions', controller.getMyAuctions);
+    router.get('/gallery', controller.getAuctionsGallery)
     router.get('/search/:search', controller.searchAll);
     router.get('/page/:page', controller.getPage);
     router.get('/create', controller.getCreate);
