@@ -15,6 +15,7 @@ module.exports = function (app, data) {
     router.get('/:id', controller.getById);
     router.post('/', controller.create);
     router.post('/offer', controller.handleOffer);
+    router.post('/:id', controller.createComment);
 
     app.use('/auctions', router);
 };

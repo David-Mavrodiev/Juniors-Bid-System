@@ -13,6 +13,17 @@ block content
                     a(href= '/profile/' + result.highestBidder)= result.highestBidder
                 else
                     h2= 'No bids yet'
+                div.comments
+                    each comment in result.auction.comments
+                            div.comment
+                                p.comment-value=comment.comment
+                                p.comment-user=comment.user
+                if result.isAuthenticated
+                    div.comments-form
+                        input#comment-text(type='text', placeholder='What do you think?')
+                        input#comment-send(type='submit', value='Comment')
+                else
+                    span Loggin to post comments
         hr
         if result.isAuthenticated
             .row

@@ -144,7 +144,7 @@ function auctionController(data) {
             let body = req.body;
             const user = req.user;
 
-            upload(req, res, function(err) {
+            upload(req, res, function (err) {
                 if (err) {
                     return res.end(JSON.stringify(err));
                 } else if (!req.file) {
@@ -198,6 +198,25 @@ function auctionController(data) {
                             });
                     }
                 });
+        },
+        createComment(req, res){
+            let body = req.body;
+            let id = req.params.id;
+            let text = body.text;
+            let user = req.user.username;
+
+            data.addCommentToAuction(id, text, user)
+                .then(auction => {
+                    if (auction) {
+                        res.status(204);
+                        res.send(user);
+                    } else {
+                        res.status(404);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
         }
     }
 };

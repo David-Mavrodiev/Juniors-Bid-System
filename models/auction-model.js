@@ -25,6 +25,12 @@ let schema = new mongoose.Schema({
         type: Date,
         required: true
     },
+    comments: {
+        type: [{
+            comment: String,
+            user: String
+        }]
+    },
     bidders: {
         type: [{
             username: String,
