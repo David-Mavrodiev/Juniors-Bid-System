@@ -4,33 +4,43 @@ block content
     .container
         .row
             div.auction
-                img.auction-image(src="/static/auctionimages/" + result.auction.id + ".jpg")
-                h2= 'Title: ' + result.auction.name
-                h4= 'Item For sale: ' + result.auction.item
-                h4= 'Creator: ' + result.auction.creator
-                h4= 'Min price: ' + result.auction.minPrice
-                if result.highestBidder
-                    h4= 'Highest bidder: ' 
-                        a(href= '/profile/' + result.highestBidder)= result.highestBidder
-                else
-                    h4= 'No bids yet'
+                div.auction-image
+                    img.auction-image(src="/static/auctionimages/" + result.auction.id + ".jpg")
+                div.auction-info
+                    h1.auction-title= ''
+                        a.auction-name(href='/auctions/' + result.auction.id)= result.auction.name
+                    h2.auction-item= 'Item: ' + result.auction.item
+                    h3.auction-creator= 'Seller: '
+                        a.auction-creator-name(href= '/profile/' + result.auction.creator)= result.auction.creator
+                div.bid-and-time
+                    if result.isAuthenticated
+                        strong
+                            a#offer-button.btn.btn-default Make an offer
+                        #offer-container(style="padding-top: 5px;display: none;")
+                            form.col-xs-2(method="post", action="/auctions/offer", role='form')
+                                input.form-control(type="number", step="0.01", name="amount", min="0", placeholder="Enter offer amount")
+                                input(type="submit" class="btn btn-success" value="Submit")
+                    else
+                        strong
+                            a.bid(href='/login')= 'Login to Bid'
+                    div.min-price-and-time
+                        span.auction-min-price= 'Min price: ' + result.auction.minPrice
+                        if result.highestBidder
+                            h4.auction-highest-bidder= 'Highest bidder: '
+                            a(href= '/profile/' + result.highestBidder)= result.highestBidder
+                        else
+                            h4.auction-no-bids= 'No bids yet'
+                                    ///////
                 div.comments
                     each comment in result.auction.comments
-                            div.comment
-                                p.comment-value
-                                    a(href='/profile/'+comment.user)= comment.user
-                                    span=': '+comment.comment
+                        div.comment
+                            p.comment-value
+                                a(href='/profile/' + comment.user)= comment.user
+                                span=': ' + comment.comment
                 if result.isAuthenticated
                     div.comments-form
-                        input#comment-text(type='text', placeholder='What do you think?')
+                        textarea#comment-text(rows=2,cols=50,placeholder='What do you think?')
                         input#comment-send(type='submit', value='Comment')
                 else
                     span Loggin to post comments
-        hr
-        if result.isAuthenticated
-            .row
-                a#offer-button.btn.btn-default Make an offer
-                #offer-container(style="padding-top: 5px;display: none;")
-                    form.col-xs-2(method="post", action="/auctions/offer", role='form')
-                        input.form-control(type="number", step="0.01", name="amount", min="0", placeholder="Enter offer amount")
-                        input(type="submit" class="btn btn-success" value="Submit")
+
