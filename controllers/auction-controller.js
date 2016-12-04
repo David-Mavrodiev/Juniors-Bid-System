@@ -46,6 +46,50 @@ function auctionController(data) {
                     })
             }
         },
+        getAuctionsGallery(req, res) {
+            let username, imageUrl;
+            if (req.isAuthenticated()) {
+                username = req.user.image ? req.user.username : 'newuser';
+                imageUrl = '/static/profileimages/' + username + '.jpg';
+            }
+            data.getAllAuctions()
+                .then(auctions => {
+                    res.render("gallery", {
+                        result: {
+                            auctions: auctions,
+                            isAuthenticated: req.isAuthenticated(),
+                            imageUrl: imageUrl,
+                            user: req.user
+                        }
+                    });
+                });
+        },
+        getMyAuctions(req, res) {
+            let username, imageUrl;
+            if (req.isAuthenticated()) {
+                username = req.user.image ? req.user.username : 'newuser';
+                imageUrl = '/static/profileimages/' + username + '.jpg';
+            }
+            if (req.isAuthenticated()) {
+                data.getAllAuctions()
+                    .then(auctions => {
+                        let myAuctions = [];
+                        for (let i = 0; i < auctions.length; i++) {
+                            if (auctions[i].creator == req.user.username) {
+                                myAuctions.push(auctions[i]);
+                            }
+                        }
+                        res.render("my-auctions", {
+                            result: {
+                                auctions: myAuctions,
+                                isAuthenticated: req.isAuthenticated(),
+                                imageUrl: imageUrl,
+                                user: req.user
+                            }
+                        });
+                    });
+            }
+        },
         searchAll(req, res) {
             let username, imageUrl;
             if (req.isAuthenticated()) {
