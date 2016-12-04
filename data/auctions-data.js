@@ -70,9 +70,10 @@ module.exports = function (models) {
                 });
             });
         },
-        createAuction: function (name, item, creator, dateCreated, endDate) {
-            let comments = []
-            let auction = new Auction({name, item, creator, dateCreated, endDate, comments});
+        createAuction: function(name, item, creator, dateCreated, endDate, minPrice) {
+            let comments = [];
+            let auction = new Auction({ name, item, creator, dateCreated, endDate,comments, minPrice });
+
             return new Promise((resolve, reject) => {
                 auction.save(err => {
                     if (err) {
