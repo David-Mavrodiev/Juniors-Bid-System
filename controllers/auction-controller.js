@@ -44,6 +44,32 @@ function auctionController(data) {
                     })
             }
         },
+        getMyAuctions(req, res) {
+            let username, imageUrl;
+            if (req.isAuthenticated()) {
+                username = req.user.image ? req.user.username : 'newuser';
+                imageUrl = '/static/profileimages/' + username + '.jpg';
+            }
+            if (req.isAuthenticated()) {
+                data.getAllAuctions()
+                    .then(auctions => {
+                        let myAuctions = [];
+                        for (let i = 0; i < auctions.length; i++) {
+                            if (auctions[i].creator == req.user.username) {
+                                myAuctions.push(auctions[i]);
+                            }
+                        }
+                        res.render("my-auctions", {
+                            result: {
+                                auctions: myAuctions,
+                                isAuthenticated: req.isAuthenticated,
+                                imageUrl: imageUrl,
+                                user: req.user
+                            }
+                        });
+                    });
+            }
+        },
         searchAll(req, res) {
             let username, imageUrl;
             if (req.isAuthenticated()) {
@@ -144,7 +170,7 @@ function auctionController(data) {
             let body = req.body;
             const user = req.user;
 
-            upload(req, res, function (err) {
+            upload(req, res, function(err) {
                 if (err) {
                     return res.end(JSON.stringify(err));
                 } else if (!req.file) {
@@ -202,7 +228,7 @@ function auctionController(data) {
                     }
                 });
         },
-        createComment(req, res){
+        createComment(req, res) {
             let body = req.body;
             let id = req.params.id;
             let text = body.text;
