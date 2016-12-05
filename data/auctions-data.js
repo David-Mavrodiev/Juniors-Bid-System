@@ -122,6 +122,12 @@ module.exports = function(models) {
                 });
             });
         },
+        removeAuctionById: function(id) {
+            return new Promise((resolve, reject) => {
+                Auction.find({ _id: id }).remove().exec();
+                resolve();
+            })
+        },
         addCommentToAuction: function(id, text, user) {
             return new Promise((resolve, reject) => {
                 Auction.findOneAndUpdate({
